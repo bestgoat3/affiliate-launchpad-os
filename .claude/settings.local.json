@@ -22,7 +22,16 @@
       "Bash(cp \"/Users/besstgoat/Downloads/screenshot1.jpg\" \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/screenshot1.jpg\")",
       "Bash(cp \"/Users/besstgoat/Downloads/screenshot2.jpg .JPG\" \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/screenshot2.jpg\")",
       "Bash(cp \"/Users/besstgoat/Downloads/ screenshot3.jpg\" \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/screenshot3.jpg\")",
-      "Bash(ls -lh \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/\"*.jpg)"
+      "Bash(ls -lh \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/\"*.jpg)",
+      "Bash(node -e \"require\\('./db/database'\\); console.log\\('DB OK'\\)\")",
+      "Bash(node -e ':*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s -X POST http://localhost:3001/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@affiliatelaunchpad.com\",\"password\":\"admin123\"}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('members:', len\\(d.get\\('members',d.get\\('users',[]\\)\\)\\)\\)\")",
+      "Bash(curl -s http://localhost:3001/api/webhooks/test)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('keys:', list\\(d.keys\\(\\)\\)[:5]\\)\")",
+      "Bash(xargs kill:*)",
+      "mcp__Claude_Preview__preview_start"
     ]
   }
 }

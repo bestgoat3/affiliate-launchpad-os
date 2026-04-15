@@ -36,6 +36,9 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
   'http://localhost:3000',
   'http://localhost:5173',
+  'http://localhost:3001',
+  'https://affiliate-launchpad.com',
+  'https://app.affiliate-launchpad.com',
 ];
 
 app.use(cors({
@@ -106,14 +109,27 @@ app.use('/api/dialer',    dialerRoutes);
 // Dashboard stats (served from sales route under /api/dashboard)
 app.use('/api/dashboard', salesRoutes);
 
-// ─── Serve React Build (Production) ───────────────────────────────────────────
-if (process.env.NODE_ENV === 'production') {
-  const clientBuild = path.join(__dirname, '../client/dist');
-  app.use(express.static(clientBuild));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(clientBuild, 'index.html'));
-  });
-}
+// ─── Serve static assets ──────────────────────────────────────────────────────
+const landingDir   = path.join(__dirname, '../../landing-page');
+const clientBuild  = path.join(__dirname, '../client/dist');
+
+// React build assets (/assets/index-xxx.js etc.) — index:false so React's
+// index.html doesn't hijack "/" away from the landing page
+app.use(express.static(clientBuild, { index: false }));
+// Landing page assets (karl.jpg, screenshots, etc.)
+app.use(express.static(landingDir));
+
+// Root "/" → landing page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(landingDir, 'index.html'));
+});
+
+// All CRM routes → React app
+const crmRoutes = ['/app', '/dashboard', '/login', '/pipeline', '/sales', '/marketing', '/clients', '/dialer', '/portal', '/resources', '/settings'];
+crmRoutes.forEach(route => {
+  app.get(route,       (req, res) => res.sendFile(path.join(clientBuild, 'index.html')));
+  app.get(`${route}/*`, (req, res) => res.sendFile(path.join(clientBuild, 'index.html')));
+});
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((req, res) => {

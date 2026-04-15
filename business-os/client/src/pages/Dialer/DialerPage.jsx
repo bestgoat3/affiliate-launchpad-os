@@ -90,7 +90,7 @@ export default function DialerPage() {
   // ── Load recent calls ───────────────────────────────────────────────────────
   const fetchRecentCalls = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('auth_token');
       const { data } = await axios.get('/api/dialer/recent', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -124,7 +124,7 @@ export default function DialerPage() {
     clearTimeout(searchTimeoutRef.current);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('auth_token');
         const { data } = await axios.get(`/api/dialer/search-leads?q=${encodeURIComponent(searchQuery)}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -162,7 +162,7 @@ export default function DialerPage() {
     setCurrentCallLogId(null);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('auth_token');
       const { data } = await axios.post('/api/dialer/call', {
         phone_number: phoneInput.trim(),
         lead_id:      selectedLead?.id || null,
@@ -196,7 +196,7 @@ export default function DialerPage() {
     }
     setLogSaving(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('auth_token');
       await axios.post('/api/dialer/log', {
         call_log_id:      currentCallLogId,
         lead_id:          selectedLead?.id || null,
