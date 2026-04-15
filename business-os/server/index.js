@@ -110,25 +110,44 @@ app.use('/api/dialer',    dialerRoutes);
 app.use('/api/dashboard', salesRoutes);
 
 // ─── Serve static assets ──────────────────────────────────────────────────────
-const landingDir   = path.join(__dirname, '../../landing-page');
+const fs = require('fs');
+
+// Support two deploy layouts:
+//  1. Full repo root on Railway: __dirname = /app/business-os/server → ../../landing-page = /app/landing-page
+//  2. business-os/ as root:      __dirname = /app/server             → ../../landing-page doesn't exist, fallback
+const landingDirA  = path.join(__dirname, '../../landing-page');
+const landingDirB  = path.join(__dirname, '../../../landing-page');
+const landingDir   = fs.existsSync(path.join(landingDirA, 'index.html')) ? landingDirA : landingDirB;
 const clientBuild  = path.join(__dirname, '../client/dist');
 
-// React build assets (/assets/index-xxx.js etc.) — index:false so React's
-// index.html doesn't hijack "/" away from the landing page
-app.use(express.static(clientBuild, { index: false }));
+// React build assets — index:false so React's index.html doesn't hijack "/"
+if (fs.existsSync(clientBuild)) {
+  app.use(express.static(clientBuild, { index: false }));
+}
 // Landing page assets (karl.jpg, screenshots, etc.)
-app.use(express.static(landingDir));
+if (fs.existsSync(landingDir)) {
+  app.use(express.static(landingDir));
+}
 
-// Root "/" → landing page
+// Root "/" → landing page (fallback to CRM if landing page not found)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(landingDir, 'index.html'));
+  const landingIndex = path.join(landingDir, 'index.html');
+  const crmIndex     = path.join(clientBuild, 'index.html');
+  if (fs.existsSync(landingIndex)) return res.sendFile(landingIndex);
+  if (fs.existsSync(crmIndex))     return res.sendFile(crmIndex);
+  res.send('<h1>Affiliate Launchpad</h1><p><a href="/login">Go to App</a></p>');
 });
 
 // All CRM routes → React app
 const crmRoutes = ['/app', '/dashboard', '/login', '/pipeline', '/sales', '/marketing', '/clients', '/dialer', '/portal', '/resources', '/settings'];
 crmRoutes.forEach(route => {
-  app.get(route,       (req, res) => res.sendFile(path.join(clientBuild, 'index.html')));
-  app.get(`${route}/*`, (req, res) => res.sendFile(path.join(clientBuild, 'index.html')));
+  const sendCRM = (req, res) => {
+    const crmIndex = path.join(clientBuild, 'index.html');
+    if (fs.existsSync(crmIndex)) return res.sendFile(crmIndex);
+    res.status(404).send('App not built. Run npm run build.');
+  };
+  app.get(route,        sendCRM);
+  app.get(`${route}/*`, sendCRM);
 });
 
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
