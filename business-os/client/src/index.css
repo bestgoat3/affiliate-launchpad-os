@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    background-color: #0A0A0A;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1A1A1A;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3A3A3A;
+  }
+}
+
+@layer components {
+  .gold-gradient {
+    background: linear-gradient(135deg, #C9A84C 0%, #E5C46A 100%);
+  }
+
+  .card-dark {
+    background-color: #1A1A1A;
+    border: 1px solid #2A2A2A;
+    border-radius: 0.75rem;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer;
+  }
+
+  .sidebar-item-active {
+    @apply text-gold bg-gold/10 border-l-2 border-gold;
+  }
+
+  .sidebar-item-inactive {
+    @apply text-gray-400 hover:text-white hover:bg-dark-hover;
+  }
+
+  .input-dark {
+    @apply w-full bg-dark-card border border-dark-border rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/30 transition-all;
+  }
+
+  .btn-gold {
+    @apply bg-gold hover:bg-gold-light text-dark font-semibold rounded-lg px-4 py-2 text-sm transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-hover hover:bg-dark-border text-white font-medium rounded-lg px-4 py-2 text-sm transition-all duration-150 border border-dark-border;
+  }
+
+  .btn-danger {
+    @apply bg-red-500/10 hover:bg-red-500/20 text-red-400 font-medium rounded-lg px-4 py-2 text-sm transition-all duration-150 border border-red-500/20;
+  }
+}

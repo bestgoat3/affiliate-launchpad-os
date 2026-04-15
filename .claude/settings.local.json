@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(zsh -l -c \"which node && which npm && node --version && npm --version\")",
+      "Bash(bash -c \"source ~/.zshrc 2>/dev/null; source ~/.zprofile 2>/dev/null; which node && node --version && which npm && npm --version\")",
+      "Bash(/usr/local/bin/npm install:*)",
+      "Bash(/usr/local/bin/node db/database.js)",
+      "Bash(/usr/local/bin/node index.js)",
+      "Bash(curl -s http://localhost:3001/health)",
+      "Bash(/usr/local/bin/npm run:*)",
+      "Read(//tmp/**)",
+      "Bash(ls -lt ~/Desktop/*.png ~/Desktop/*.jpg)",
+      "Bash(ls -lt ~/Desktop/*.png ~/Desktop/*.jpg ~/Desktop/*.jpeg)",
+      "Bash(ls -lt ~/Downloads/screenshot*.jpg ~/Downloads/screenshot*.png)",
+      "Bash(xargs ls:*)",
+      "Bash(mdfind -onlyin '~' 'kMDItemFSContentChangeDate >= $time.today')",
+      "Bash(grep -E \"\\\\.\\(jpg|jpeg|png|webp\\)$\")",
+      "Bash(grep -E \"\\\\.\\(jpg|jpeg|png|webp|heic\\)$\")",
+      "Bash(sort -k6,7)",
+      "Bash(ls -la /Users/besstgoat/Downloads/screenshot*.jpg)",
+      "Bash(cp \"/Users/besstgoat/Downloads/screenshot1.jpg\" \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/screenshot1.jpg\")",
+      "Bash(cp \"/Users/besstgoat/Downloads/screenshot2.jpg .JPG\" \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/screenshot2.jpg\")",
+      "Bash(cp \"/Users/besstgoat/Downloads/ screenshot3.jpg\" \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/screenshot3.jpg\")",
+      "Bash(ls -lh \"/Users/besstgoat/Affiliate Launchpad OS 1/landing-page/\"*.jpg)"
+    ]
+  }
+}

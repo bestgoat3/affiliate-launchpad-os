@@ -1,0 +1,24 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Landing Page (static)",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "landing-page"],
+      "port": 8080
+    },
+    {
+      "name": "Business OS — Backend (Node/Express)",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["business-os/start-server.sh"],
+      "port": 3001,
+      "autoPort": false
+    },
+    {
+      "name": "Business OS — Frontend (React/Vite)",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source ~/.zshrc 2>/dev/null || source ~/.bash_profile 2>/dev/null || true; cd business-os/client && npm run dev"],
+      "port": 5173
+    }
+  ]
+}

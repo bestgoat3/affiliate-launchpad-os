@@ -1,0 +1,24 @@
+{
+  "name": "affiliate-launchpad-os",
+  "version": "1.0.0",
+  "description": "Affiliate Launchpad Business OS — CRM, Sales, Marketing, Fulfillment & Client Portal",
+  "private": true,
+  "scripts": {
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "db:init": "cd server && node db/database.js",
+    "setup": "npm run install:all && npm run db:init && echo '\n✅  Setup complete! Run: npm run dev\n'",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev": "concurrently --names 'SERVER,CLIENT' --prefix-colors 'yellow,cyan' \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "cd client && npm install && npm run build",
+    "start": "node server/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

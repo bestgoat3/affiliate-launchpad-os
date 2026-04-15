@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="6" fill="#0A0A0A"/>
+  <!-- Rocket body -->
+  <path d="M16 3 C16 3, 23 5, 25 12 L22 15 L10 15 L7 12 C9 5, 16 3, 16 3Z" fill="#C9A84C"/>
+  <!-- Nose tip -->
+  <path d="M16 3 L18.5 8 L13.5 8 Z" fill="#E5C46A"/>
+  <!-- Left fin -->
+  <path d="M7 12 L4 17 L9 15 Z" fill="#C9A84C"/>
+  <!-- Right fin -->
+  <path d="M25 12 L28 17 L23 15 Z" fill="#C9A84C"/>
+  <!-- Flame -->
+  <path d="M13 15 C13 15, 11 20, 16 19 C16 19, 21 21, 19 15 Z" fill="#E5C46A" opacity="0.85"/>
+  <!-- Window -->
+  <circle cx="16" cy="11" r="2.5" fill="#0A0A0A" opacity="0.5"/>
+  <circle cx="16" cy="11" r="1.5" fill="#E5C46A" opacity="0.7"/>
+</svg>

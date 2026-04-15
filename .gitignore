@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+business-os/node_modules/
+business-os/server/node_modules/
+business-os/client/node_modules/
+
+# Build output
+business-os/client/dist/
+
+# Environment files (NEVER commit secrets)
+.env
+business-os/server/.env
+business-os/.env
+
+# SQLite database files (data stays local/on server)
+*.db
+*.db-shm
+*.db-wal
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Railway
+.railway/
