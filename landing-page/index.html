@@ -1221,6 +1221,111 @@
       color: #444;
     }
 
+    /* ─── PRIVACY POLICY MODAL ─────────────────────────────────────────────── */
+    #privacy-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #privacy-modal-overlay.open {
+      display: flex;
+    }
+    #privacy-modal {
+      background: #111111;
+      border: 1px solid var(--border-bright);
+      border-radius: 16px;
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.08);
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold-dim) #1a1a1a;
+    }
+    #privacy-modal::-webkit-scrollbar { width: 6px; }
+    #privacy-modal::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 6px; }
+    #privacy-modal::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 6px; }
+    .pm-header {
+      position: sticky;
+      top: 0;
+      background: #111111;
+      border-bottom: 1px solid var(--border);
+      padding: 24px 32px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1;
+    }
+    .pm-header-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--off-white);
+    }
+    .pm-header-title span { color: var(--gold); }
+    .pm-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: var(--transition);
+      color: var(--gray-mid);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .pm-close:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); color: var(--gold); }
+    .pm-body {
+      padding: 28px 32px 36px;
+      font-size: 15px;
+      color: var(--gray-light);
+      line-height: 1.75;
+    }
+    .pm-body h2 {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--off-white);
+      margin: 28px 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pm-body h2:first-child { margin-top: 0; }
+    .pm-body p { margin-bottom: 14px; }
+    .pm-body ul { padding-left: 20px; margin-bottom: 14px; }
+    .pm-body ul li { margin-bottom: 6px; list-style: disc; }
+    .pm-body strong { color: var(--off-white); }
+    .pm-body a { color: var(--gold); text-decoration: underline; }
+    .pm-body a:hover { color: var(--gold-light); }
+    .pm-sms-callout {
+      background: rgba(201,168,76,0.07);
+      border: 1px solid var(--border-bright);
+      border-left: 3px solid var(--gold);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      margin: 20px 0;
+    }
+    .pm-sms-callout p { margin-bottom: 0; }
+    .pm-effective {
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
     /* ─── ROCKET ICON (inline SVG helper) ─────────────────────────────────── */
     .logo-rocket {
       display: inline-block;
@@ -1794,21 +1899,50 @@
         Step 1 — Fill Out Your Application →
       </a>
     </div>
-    <p class="cta-disclaimer reveal reveal-delay-3" style="margin-top:12px;margin-bottom:32px;">
+    <p class="cta-disclaimer reveal reveal-delay-3" style="margin-top:12px;margin-bottom:8px;">
       Takes 2 minutes. No payment info required.
     </p>
+    <p class="cta-disclaimer reveal reveal-delay-3" style="margin-top:0;margin-bottom:32px;font-size:12px;color:#888;max-width:520px;margin-left:auto;margin-right:auto;">
+      By submitting this application, you agree to receive SMS text messages from Affiliate Launchpad LLC. Msg &amp; data rates may apply. Reply STOP to opt out. <a href="#" id="cta-privacy-link" style="color:#C9A84C;text-decoration:underline;">Privacy Policy</a>
+    </p>
 
-    <!-- Step 2: Book the strategy call (Calendly inline) -->
-    <div class="reveal reveal-delay-4" style="max-width:720px;margin:0 auto;">
-      <p style="color:#C9A84C;font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;">Step 2 — Book Your Free Strategy Call</p>
-      <div id="calendly-embed" style="border-radius:16px;overflow:hidden;min-height:1000px;height:1000px;background:#1A1A1A;">
-        <!-- Calendly inline widget loaded by script below -->
+    <!-- Step 2: Book the strategy call -->
+    <div class="reveal reveal-delay-4" style="max-width:640px;margin:0 auto;">
+      <div style="background:linear-gradient(135deg,#141414 0%,#1c1a12 100%);border:1px solid #C9A84C33;border-radius:20px;padding:40px 36px;text-align:center;position:relative;overflow:hidden;">
+        <!-- subtle gold glow top -->
+        <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:120px;background:radial-gradient(ellipse,#C9A84C22 0%,transparent 70%);pointer-events:none;"></div>
+
+        <p style="color:#C9A84C;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;">Step 2 — Book Your Free Strategy Call</p>
+
+        <h3 style="font-size:clamp(20px,3vw,26px);font-weight:700;color:#fff;margin-bottom:12px;line-height:1.3;">
+          Get Your Personal <span style="background:linear-gradient(135deg,#C9A84C,#E5C46A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TikTok Shop Roadmap</span>
+        </h3>
+        <p style="color:#aaa;font-size:15px;margin-bottom:28px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.6;">
+          On this free 45-minute call, Karl will map out your exact path to your first $5K month — and answer every question before you commit to anything.
+        </p>
+
+        <!-- trust chips -->
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px;">
+          <span style="background:#ffffff0d;border:1px solid #ffffff15;border-radius:100px;padding:6px 14px;font-size:12px;color:#ccc;">⚡ 45 Min • No Pitch</span>
+          <span style="background:#ffffff0d;border:1px solid #ffffff15;border-radius:100px;padding:6px 14px;font-size:12px;color:#ccc;">🎯 Personalized Action Plan</span>
+          <span style="background:#ffffff0d;border:1px solid #ffffff15;border-radius:100px;padding:6px 14px;font-size:12px;color:#ccc;">🔒 No Payment Required</span>
+        </div>
+
+        <a href="https://calendly.com/goatecommgmt/book" target="_blank" rel="noopener" id="cta-calendly-btn"
+           style="display:inline-block;background:linear-gradient(135deg,#C9A84C,#E5C46A);color:#0a0a0a;font-weight:800;font-size:17px;padding:20px 44px;border-radius:100px;text-decoration:none;letter-spacing:.01em;box-shadow:0 8px 32px #C9A84C44;transition:transform .15s,box-shadow .15s;"
+           onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px #C9A84C66';"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 8px 32px #C9A84C44';">
+          Book My Free Strategy Call →
+        </a>
+
+        <p style="margin-top:16px;font-size:12px;color:#666;">
+          Applications reviewed within 24 hrs &nbsp;·&nbsp; Spots fill fast
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:#555;max-width:420px;margin-left:auto;margin-right:auto;">
+          By booking a call, you agree to receive SMS messages from Affiliate Launchpad LLC. Msg &amp; data rates may apply. Reply STOP to opt out. <a href="#" class="cta-privacy-link-cal" style="color:#C9A84C;text-decoration:underline;">Privacy Policy</a>
+        </p>
       </div>
     </div>
-
-    <p class="cta-disclaimer reveal reveal-delay-4" style="margin-top:24px;">
-      Applications are reviewed within 24 hours. No payment until you're accepted.
-    </p>
   </div>
 </section>
 
@@ -1937,9 +2071,9 @@
       </div>
 
       <nav class="footer-links" aria-label="Footer navigation">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Contact Us</a>
+        <a href="#" id="footer-privacy-link">Privacy Policy</a>
+        <a href="privacy-policy.html" target="_blank" rel="noopener">Full Privacy Policy</a>
+        <a href="mailto:karl@affiliate-launchpad.com">Contact Us</a>
         <a href="YOUFORM_URL">Apply Now</a>
       </nav>
 
@@ -1947,17 +2081,126 @@
         <strong style="color:var(--off-white);">Results Disclaimer:</strong> Results not typical. Individual results will vary based on effort, experience, market conditions, and other factors. The income figures shown are examples of what is possible and are not guarantees of future earnings. Affiliate Launchpad is an educational and coaching program — not a business opportunity, investment, or get-rich-quick scheme.
       </p>
 
+      <p class="footer-disclaimer" style="margin-top:-10px;">
+        <strong style="color:var(--gold);">SMS Consent:</strong> By submitting an application or contact form on this site, you agree to receive SMS text messages from Affiliate Launchpad LLC regarding your inquiry, program updates, and coaching information. Message &amp; data rates may apply. Reply STOP to opt out at any time. View our <a href="#" id="footer-privacy-link-2" style="color:var(--gold);text-decoration:underline;">Privacy Policy</a> for full details.
+      </p>
+
+      <p class="footer-disclaimer" style="margin-top:-10px;font-size:12px;color:#888;">
+        <strong style="color:var(--off-white);">Affiliate Launchpad LLC</strong> &nbsp;|&nbsp; 8301 State Line Rd, Ste 220 #3524, Kansas City, MO &nbsp;|&nbsp; <a href="tel:+19783899731" style="color:#888;">+1 (978) 389-9731</a> &nbsp;|&nbsp; <a href="mailto:karl@affiliate-launchpad.com" style="color:#888;">karl@affiliate-launchpad.com</a>
+      </p>
+
       <p class="footer-copy">
-        &copy; <span id="footer-year"></span> Affiliate Launchpad. All rights reserved.
+        &copy; <span id="footer-year"></span> Affiliate Launchpad LLC. All rights reserved.
       </p>
 
     </div>
   </div>
 </footer>
 
-<!-- Calendly inline widget -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- ═══════════════════════════════════════════════════════════════
+     PRIVACY POLICY MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="privacy-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <div id="privacy-modal">
+    <div class="pm-header">
+      <div class="pm-header-title" id="pm-title">Privacy <span>Policy</span></div>
+      <button class="pm-close" id="pm-close-btn" aria-label="Close privacy policy">&times;</button>
+    </div>
+    <div class="pm-body">
+      <p class="pm-effective">Effective Date: April 21, 2026 &nbsp;|&nbsp; Last Updated: April 21, 2026</p>
+
+      <h2>About This Policy</h2>
+      <p>
+        Affiliate Launchpad LLC ("we," "us," or "our") operates <strong>affiliate-launchpad.com</strong> and related coaching services. This Privacy Policy explains how we collect, use, and protect your personal information when you visit our website or submit an application.
+      </p>
+
+      <h2>Information We Collect</h2>
+      <p>When you submit an application or contact form on this site, we may collect the following personal information:</p>
+      <ul>
+        <li><strong>Full Name</strong> — to personalize communications and coaching records</li>
+        <li><strong>Email Address</strong> — to send program information, updates, and follow-ups</li>
+        <li><strong>Phone Number</strong> — to contact you via SMS and/or phone regarding your application and our coaching program</li>
+        <li><strong>Application Responses</strong> — details you share about your background and goals</li>
+      </ul>
+      <p>We may also collect basic technical data (browser type, IP address, pages visited) through standard web analytics tools to improve site performance.</p>
+
+      <h2>How We Use Your Information</h2>
+      <p>The information you provide is used to:</p>
+      <ul>
+        <li>Review and process your coaching program application</li>
+        <li>Contact you about your application status and next steps</li>
+        <li>Send educational content, program updates, and promotional information related to affiliate marketing services offered by Affiliate Launchpad LLC</li>
+        <li>Schedule and conduct strategy calls</li>
+        <li>Improve our website and services</li>
+      </ul>
+
+      <div class="pm-sms-callout">
+        <h2 style="border:none;margin-top:0;padding-bottom:4px;font-size:16px;">SMS / Text Message Consent</h2>
+        <p>
+          <strong>By submitting an application or contact form on affiliate-launchpad.com, you expressly consent to receive SMS text messages from Affiliate Launchpad LLC.</strong> These messages may include:
+        </p>
+        <ul>
+          <li>Application follow-up and status updates</li>
+          <li>Reminders for scheduled strategy calls</li>
+          <li>Program information and coaching updates</li>
+          <li>Promotional content related to our affiliate marketing services</li>
+        </ul>
+        <p>
+          <strong>Message frequency varies.</strong> Message &amp; data rates may apply. You may opt out at any time by replying <strong>STOP</strong> to any text message. After opting out, you will receive one final confirmation message and no further texts will be sent. For help, reply <strong>HELP</strong> or email <a href="mailto:karl@affiliate-launchpad.com">karl@affiliate-launchpad.com</a>.
+        </p>
+        <p>
+          Your phone number is collected solely to contact you about Affiliate Launchpad LLC coaching services. We do not sell or share your phone number with third parties for their own marketing purposes.
+        </p>
+      </div>
+
+      <h2>How We Share Your Information</h2>
+      <p>
+        We do not sell, rent, or trade your personal information to third parties. We may share your information only with:
+      </p>
+      <ul>
+        <li><strong>Service Providers</strong> — trusted tools we use to operate our business (e.g., CRM software, scheduling platforms, SMS providers) who are contractually obligated to protect your data</li>
+        <li><strong>Legal Requirements</strong> — if required by law or to protect the rights and safety of our users and business</li>
+      </ul>
+
+      <h2>Data Retention</h2>
+      <p>
+        We retain your personal information for as long as necessary to fulfill the purposes described in this policy or as required by law. If you wish to have your data removed, please contact us at <a href="mailto:karl@affiliate-launchpad.com">karl@affiliate-launchpad.com</a>.
+      </p>
+
+      <h2>Your Rights &amp; Choices</h2>
+      <ul>
+        <li><strong>Opt Out of SMS:</strong> Reply STOP to any text message at any time</li>
+        <li><strong>Opt Out of Email:</strong> Click the unsubscribe link in any email</li>
+        <li><strong>Access or Delete Your Data:</strong> Email <a href="mailto:karl@affiliate-launchpad.com">karl@affiliate-launchpad.com</a></li>
+      </ul>
+
+      <h2>Cookies &amp; Analytics</h2>
+      <p>
+        Our website may use cookies and third-party analytics tools (such as Google Analytics) to understand how visitors use our site. You can disable cookies in your browser settings at any time.
+      </p>
+
+      <h2>Children's Privacy</h2>
+      <p>
+        Our services are not directed to individuals under the age of 18. We do not knowingly collect personal information from minors. If you believe a minor has submitted information to us, please contact us immediately.
+      </p>
+
+      <h2>Contact Us</h2>
+      <p>
+        If you have any questions about this Privacy Policy or your personal data, please contact us:
+      </p>
+      <p>
+        <strong>Affiliate Launchpad LLC</strong><br>
+        Email: <a href="mailto:karl@affiliate-launchpad.com">karl@affiliate-launchpad.com</a><br>
+        Website: <a href="https://affiliate-launchpad.com" target="_blank" rel="noopener">affiliate-launchpad.com</a>
+      </p>
+
+      <p style="margin-top:28px;font-size:13px;color:var(--gray-mid);">
+        This policy may be updated periodically. Continued use of our website or services after changes constitutes acceptance of the revised policy.
+      </p>
+    </div>
+  </div>
+</div>
+
 
 <!-- ═══════════════════════════════════════════════════════════════
      JAVASCRIPT
@@ -1974,26 +2217,7 @@
     a.href = YOUFORM_URL;
   });
 
-  // ── CALENDLY INLINE EMBED ──────────────────────────────────────
-  function initCalendly() {
-    const el = document.getElementById('calendly-embed');
-    if (!el || !window.Calendly) return;
-    window.Calendly.initInlineWidget({
-      url: CALENDLY_URL + '?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=1a1a1a&text_color=ffffff&primary_color=c9a84c',
-      parentElement: el,
-      prefill: {},
-      utm: {},
-      styles: { height: '1000px' },
-    });
-  }
-  // Try immediately in case script already loaded, else wait for it
-  if (window.Calendly) {
-    initCalendly();
-  } else {
-    document.querySelector('script[src*="calendly"]')?.addEventListener('load', initCalendly);
-  }
-
-  // ── FOOTER YEAR ─────────────────────────────────────────────────
+// ── FOOTER YEAR ─────────────────────────────────────────────────
   document.getElementById('footer-year').textContent = new Date().getFullYear();
 
   // ── VSL VIDEO EMBED ─────────────────────────────────────────────
@@ -2213,7 +2437,58 @@
     // Force visibility for above-fold hero elements after page load
     setTimeout(() => el.classList.add('visible'), 100);
   });
+
+  // ── PRIVACY POLICY MODAL ─────────────────────────────────────────
+  (function () {
+    const overlay  = document.getElementById('privacy-modal-overlay');
+    const closeBtn = document.getElementById('pm-close-btn');
+
+    function openModal() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Footer link triggers
+    // Wire CTA privacy links
+    const ctaPrivacyLink = document.getElementById('cta-privacy-link');
+    if (ctaPrivacyLink) ctaPrivacyLink.addEventListener('click', e => { e.preventDefault(); overlay.classList.add('open'); document.body.style.overflow = 'hidden'; });
+    document.querySelectorAll('.cta-privacy-link-cal').forEach(el => el.addEventListener('click', e => { e.preventDefault(); overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }));
+    ['footer-privacy-link', 'footer-privacy-link-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal();
+        });
+      }
+    });
+
+    // Close button
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+    // Click outside modal to close
+    if (overlay) {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+      });
+    }
+
+    // Escape key to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+  })();
 </script>
+
+
+<!-- GHL Chat Widget -->
+<script src="https://beta.leadconnectorhq.com/loader.js" data-resources-url="https://beta.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69e74a7a06d5d5e258e21556"></script>
 
 </body>
 </html>
