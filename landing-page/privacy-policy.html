@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Noble Transformation LLC</title>
+  <meta name="description" content="Privacy Policy for Noble Transformation LLC. Learn how we collect, use, and protect your personal information including SMS consent.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-0:       #0c0d0f;
+      --bg-1:       #141518;
+      --bg-2:       #1c1d20;
+      --line:       #2f3035;
+      --line-2:     #3a3b40;
+      --text:       #ececef;
+      --soft:       #cfd0d3;
+      --muted:      #9a9ba0;
+      --red:        #c8102e;
+      --red-bright: #e53e4e;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+      --max-w:      760px;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--bg-0);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    a { color: var(--red-bright); text-decoration: underline; }
+    a:hover { color: var(--red); }
+    img { max-width: 100%; display: block; }
+
+    /* ── TOP NAV BAR ── */
+    .pp-nav {
+      background: rgba(12,13,15,0.95);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .pp-nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .pp-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .pp-nav-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .pp-nav-logo-text .nt-noble { color: var(--soft); }
+    .pp-nav-logo-text .nt-trans { color: var(--red-bright); }
+    .pp-nav-back {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .pp-nav-back:hover { color: var(--red-bright); text-decoration: none; }
+
+    /* ── HERO HEADER ── */
+    .pp-header {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,16,46,0.06) 0%, transparent 70%),
+        var(--bg-0);
+      border-bottom: 1px solid var(--line);
+      padding: 64px 24px 52px;
+      text-align: center;
+    }
+    .pp-header-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red-bright);
+      border: 1px solid rgba(200,16,46,0.35);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .pp-header-title {
+      font-family: var(--font-serif);
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .pp-header-title span { color: var(--red-bright); }
+    .pp-header-meta {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .pp-content {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+    .pp-content h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 44px 0 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .pp-content h2:first-child { margin-top: 0; }
+    .pp-content p {
+      font-size: 16px;
+      color: var(--soft);
+      margin-bottom: 16px;
+    }
+    .pp-content ul {
+      padding-left: 22px;
+      margin-bottom: 16px;
+    }
+    .pp-content ul li {
+      font-size: 16px;
+      color: var(--soft);
+      margin-bottom: 8px;
+      list-style: disc;
+    }
+    .pp-content strong { color: var(--text); }
+    .pp-content em { color: var(--muted); font-style: italic; }
+
+    /* ── SMS HIGHLIGHT BOX ── */
+    .sms-box {
+      background: rgba(200,16,46,0.05);
+      border: 1px solid rgba(200,16,46,0.3);
+      border-left: 4px solid var(--red);
+      border-radius: 12px;
+      padding: 28px 28px 20px;
+      margin: 32px 0;
+    }
+    .sms-box-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--red-bright);
+      margin-bottom: 16px;
+    }
+    .sms-box p, .sms-box li {
+      color: var(--soft);
+      font-size: 15px;
+    }
+    .sms-box ul { padding-left: 20px; margin: 10px 0 14px; }
+    .sms-box ul li { margin-bottom: 6px; }
+    .sms-opt-out {
+      background: rgba(200,16,46,0.04);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 14px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .sms-opt-out strong { color: var(--text); }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: var(--bg-2);
+      border: 1px solid var(--line-2);
+      border-radius: 12px;
+      padding: 28px;
+      margin-top: 16px;
+    }
+    .contact-card p { margin-bottom: 8px; font-size: 15px; color: var(--soft); }
+    .contact-card p:last-child { margin-bottom: 0; }
+
+    /* ── FOOTER ── */
+    .pp-footer {
+      background: var(--bg-1);
+      border-top: 1px solid var(--line);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .pp-footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .pp-footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .pp-footer-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .pp-footer-logo-text .nt-noble { color: var(--soft); }
+    .pp-footer-logo-text .nt-trans { color: var(--red-bright); }
+    .pp-footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .pp-footer-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .pp-footer-links a:hover { color: var(--red-bright); }
+    .pp-footer-copy { font-size: 13px; color: #444; }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<div class="pp-nav">
+  <div class="pp-nav-inner">
+    <a href="/" class="pp-nav-logo" aria-label="Noble Transformation Home">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pp-red" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e53e4e"/>
+            <stop offset="50%" stop-color="#c8102e"/>
+            <stop offset="100%" stop-color="#8a0a1f"/>
+          </linearGradient>
+        </defs>
+        <circle cx="20" cy="20" r="19" fill="#1c1d20" stroke="url(#pp-red)" stroke-width="1.4"/>
+        <polygon points="20,4 16,9 18.5,8 20,11 21.5,8 24,9" fill="url(#pp-red)"/>
+        <ellipse cx="8" cy="18" rx="3.5" ry="1.5" transform="rotate(-30,8,18)" fill="url(#pp-red)" opacity="0.85"/>
+        <ellipse cx="6.5" cy="22" rx="3.5" ry="1.5" transform="rotate(-20,6.5,22)" fill="url(#pp-red)" opacity="0.7"/>
+        <ellipse cx="7" cy="26" rx="3" ry="1.3" transform="rotate(-10,7,26)" fill="url(#pp-red)" opacity="0.55"/>
+        <ellipse cx="32" cy="18" rx="3.5" ry="1.5" transform="rotate(30,32,18)" fill="url(#pp-red)" opacity="0.85"/>
+        <ellipse cx="33.5" cy="22" rx="3.5" ry="1.5" transform="rotate(20,33.5,22)" fill="url(#pp-red)" opacity="0.7"/>
+        <ellipse cx="33" cy="26" rx="3" ry="1.3" transform="rotate(10,33,26)" fill="url(#pp-red)" opacity="0.55"/>
+        <text x="20" y="29" font-family="'Playfair Display',Georgia,serif" font-size="18" font-weight="700" fill="#ececef" text-anchor="middle">N</text>
+      </svg>
+      <div class="pp-nav-logo-text"><span class="nt-noble">Noble</span> <span class="nt-trans">Transformation</span></div>
+    </a>
+    <a href="/" class="pp-nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Site
+    </a>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header class="pp-header">
+  <div class="pp-header-eyebrow">Legal</div>
+  <h1 class="pp-header-title">Privacy <span>Policy</span></h1>
+  <p class="pp-header-meta">Noble Transformation LLC &nbsp;&bull;&nbsp; Effective: May 1, 2026 &nbsp;&bull;&nbsp; Last Updated: May 1, 2026</p>
+</header>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="pp-content">
+
+  <h2>About This Policy</h2>
+  <p>
+    Noble Transformation LLC ("we," "us," or "our") operates <strong>nobletransformation.com</strong> and provides premium body recomposition coaching services. This Privacy Policy explains what personal information we collect, how we use it, and your rights regarding that information.
+  </p>
+  <p>
+    By using our website or submitting an application, you agree to the collection and use of information as described in this policy.
+  </p>
+
+  <h2>Information We Collect</h2>
+  <p>When you submit an application or contact form on this site, we collect the following personal information you voluntarily provide:</p>
+  <ul>
+    <li><strong>Full Name</strong> — to personalize communications and coaching records</li>
+    <li><strong>Email Address</strong> — to send program information, updates, and follow-up messages</li>
+    <li><strong>Phone Number</strong> — to contact you via SMS and/or phone regarding your application and our coaching program</li>
+    <li><strong>Application Responses</strong> — details you share about your background, goals, and fitness history</li>
+  </ul>
+  <p>
+    We may also automatically collect standard technical information when you visit our site, including your IP address, browser type, pages visited, and referring URLs, using cookies and analytics tools. This data is used to improve site performance and is not linked to your personal identity.
+  </p>
+
+  <h2>How We Use Your Information</h2>
+  <p>The personal information you provide is used to:</p>
+  <ul>
+    <li>Review and process your coaching program application</li>
+    <li>Contact you about your application status, next steps, and scheduling</li>
+    <li>Deliver educational content, program updates, and promotional communications related to body recomposition coaching services offered by Noble Transformation LLC</li>
+    <li>Send SMS text messages as described below</li>
+    <li>Conduct scheduled strategy calls and provide ongoing coaching support</li>
+    <li>Improve our website, marketing, and service offerings</li>
+  </ul>
+
+  <!-- ── SMS SECTION ── -->
+  <div class="sms-box">
+    <div class="sms-box-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e53e4e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.35 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+      SMS / Text Message Consent &amp; Disclosure
+    </div>
+
+    <p>
+      <strong>By submitting an application or any contact form on this site, you expressly consent to receive SMS (text) messages from Noble Transformation LLC.</strong> These messages may include:
+    </p>
+    <ul>
+      <li>Application follow-up messages and status updates</li>
+      <li>Reminders for scheduled strategy calls or coaching sessions</li>
+      <li>Program information, coaching updates, and onboarding instructions</li>
+      <li>Promotional content related to our body recomposition coaching services</li>
+    </ul>
+
+    <p>
+      <strong>Message frequency varies</strong> based on your application stage and program enrollment. You may receive multiple messages per week during active enrollment periods.
+    </p>
+
+    <p>
+      <strong>Message and data rates may apply</strong> depending on your carrier and plan.
+    </p>
+
+    <p>
+      Your consent to receive SMS messages is not a condition of purchase. You may use our services without agreeing to receive promotional SMS by contacting us directly at <a href="mailto:karl@nobletransformation.com">karl@nobletransformation.com</a>.
+    </p>
+
+    <div class="sms-opt-out">
+      <strong>How to Opt Out:</strong> Reply <strong>STOP</strong> to any text message at any time to unsubscribe. After sending STOP, you will receive one final confirmation message. No further SMS messages will be sent to your number. To re-subscribe, reply <strong>START</strong>.<br><br>
+      <strong>For Help:</strong> Reply <strong>HELP</strong> to any text message or email <a href="mailto:karl@nobletransformation.com">karl@nobletransformation.com</a>.<br><br>
+      <strong>Supported carriers:</strong> SMS service is available on all major U.S. carriers. Carrier support for short codes may vary.
+    </div>
+  </div>
+
+  <h2>How We Share Your Information</h2>
+  <p>
+    <strong>We do not sell, rent, or trade your personal information to third parties.</strong> We may share your information only in the following limited circumstances:
+  </p>
+  <ul>
+    <li><strong>Service Providers:</strong> We use trusted third-party tools to operate our business (e.g., CRM software, email platforms, SMS messaging providers, scheduling tools). These providers are given access only to the information needed to perform their services and are contractually obligated to protect your data.</li>
+    <li><strong>Legal Requirements:</strong> We may disclose your information if required to do so by law or in response to valid legal process, or to protect the rights, property, or safety of Noble Transformation LLC, our users, or the public.</li>
+    <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction. We will notify you via email and/or a prominent notice on our website.</li>
+  </ul>
+
+  <h2>Data Retention</h2>
+  <p>
+    We retain your personal information for as long as necessary to provide our services, maintain our coaching relationships, comply with legal obligations, and resolve disputes. Applicants who do not enroll in the program may have their data retained for up to 24 months for follow-up purposes.
+  </p>
+  <p>
+    If you wish to have your personal information deleted, please contact us at <a href="mailto:karl@nobletransformation.com">karl@nobletransformation.com</a> and we will process your request within 30 days.
+  </p>
+
+  <h2>Your Rights &amp; Choices</h2>
+  <ul>
+    <li><strong>Opt Out of SMS:</strong> Reply STOP to any text message at any time</li>
+    <li><strong>Opt Out of Email Marketing:</strong> Click the "Unsubscribe" link in any marketing email</li>
+    <li><strong>Access Your Data:</strong> Request a copy of the personal information we hold about you</li>
+    <li><strong>Correct Your Data:</strong> Request correction of inaccurate or incomplete information</li>
+    <li><strong>Delete Your Data:</strong> Request deletion of your personal information (subject to legal retention requirements)</li>
+  </ul>
+  <p>
+    To exercise any of these rights, email us at <a href="mailto:karl@nobletransformation.com">karl@nobletransformation.com</a> with your request.
+  </p>
+
+  <h2>Cookies &amp; Analytics</h2>
+  <p>
+    Our website uses cookies — small text files stored on your device — to improve performance, remember preferences, and gather anonymous analytics. We may use tools such as Google Analytics to understand traffic patterns and improve the user experience.
+  </p>
+  <p>
+    You can disable or delete cookies through your browser settings. Note that disabling cookies may affect some functionality of the site.
+  </p>
+
+  <h2>Third-Party Links</h2>
+  <p>
+    Our website may contain links to third-party sites such as YouTube, Calendly, and YouForm. These sites have their own privacy policies and we are not responsible for their practices. We encourage you to review the privacy policy of any third-party site you visit.
+  </p>
+
+  <h2>Children's Privacy</h2>
+  <p>
+    Our services are intended for adults aged 18 and older. We do not knowingly collect personal information from individuals under 18. If you believe a minor has submitted information to us, please contact us at <a href="mailto:karl@nobletransformation.com">karl@nobletransformation.com</a> and we will promptly delete it.
+  </p>
+
+  <h2>Security</h2>
+  <p>
+    We take reasonable technical and organizational measures to protect your personal information against unauthorized access, loss, or misuse. However, no method of data transmission over the internet is 100% secure, and we cannot guarantee absolute security.
+  </p>
+
+  <h2>Changes to This Policy</h2>
+  <p>
+    We may update this Privacy Policy from time to time to reflect changes in our practices or applicable law. When we make material changes, we will update the "Last Updated" date at the top of this page. Your continued use of our website or services after any changes constitutes your acceptance of the updated policy.
+  </p>
+
+  <h2>Contact Us</h2>
+  <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us:</p>
+  <div class="contact-card">
+    <p><strong>Noble Transformation LLC</strong></p>
+    <p>8301 State Line Rd, Ste 220 #3524, Kansas City, MO</p>
+    <p>Phone: <a href="tel:+19783899731">+1 (978) 389-9731</a></p>
+    <p>Email: <a href="mailto:karl@nobletransformation.com">karl@nobletransformation.com</a></p>
+    <p>Website: <a href="https://nobletransformation.com" target="_blank" rel="noopener">nobletransformation.com</a></p>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="pp-footer">
+  <div class="pp-footer-inner">
+    <a href="/" class="pp-footer-logo" aria-label="Noble Transformation Home">
+      <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pp-foot-red" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e53e4e"/>
+            <stop offset="100%" stop-color="#8a0a1f"/>
+          </linearGradient>
+        </defs>
+        <circle cx="20" cy="20" r="19" fill="#1c1d20" stroke="url(#pp-foot-red)" stroke-width="1.4"/>
+        <polygon points="20,4 16,9 18.5,8 20,11 21.5,8 24,9" fill="url(#pp-foot-red)"/>
+        <ellipse cx="8" cy="20" rx="3.5" ry="1.4" transform="rotate(-25,8,20)" fill="url(#pp-foot-red)" opacity="0.8"/>
+        <ellipse cx="32" cy="20" rx="3.5" ry="1.4" transform="rotate(25,32,20)" fill="url(#pp-foot-red)" opacity="0.8"/>
+        <text x="20" y="29" font-family="'Playfair Display',Georgia,serif" font-size="18" font-weight="700" fill="#ececef" text-anchor="middle">N</text>
+      </svg>
+      <div class="pp-footer-logo-text"><span class="nt-noble">Noble</span> <span class="nt-trans">Transformation</span></div>
+    </a>
+    <nav class="pp-footer-links" aria-label="Footer links">
+      <a href="/">Home</a>
+      <a href="https://app.youform.com/forms/6oxwjnne" target="_blank" rel="noopener">Apply Now</a>
+      <a href="mailto:karl@nobletransformation.com">Contact Us</a>
+    </nav>
+    <p class="pp-footer-copy">&copy; <span id="footer-year"></span> Noble Transformation LLC. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

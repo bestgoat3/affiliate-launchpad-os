@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" width="200" height="48">
+  <defs>
+    <linearGradient id="nt-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e53e4e"/>
+      <stop offset="50%" stop-color="#c8102e"/>
+      <stop offset="100%" stop-color="#8a0a1f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Crest mark -->
+  <circle cx="24" cy="24" r="22.5" fill="#1c1d20" stroke="url(#nt-red)" stroke-width="1.5"/>
+  <!-- Crown -->
+  <polygon points="24,5 19.5,11 22.5,9.5 24,13 25.5,9.5 28.5,11" fill="url(#nt-red)"/>
+  <!-- Left laurel -->
+  <ellipse cx="9" cy="21" rx="4" ry="1.6" transform="rotate(-30,9,21)" fill="url(#nt-red)" opacity="0.85"/>
+  <ellipse cx="7.5" cy="26" rx="4" ry="1.6" transform="rotate(-18,7.5,26)" fill="url(#nt-red)" opacity="0.7"/>
+  <ellipse cx="8" cy="31" rx="3.5" ry="1.4" transform="rotate(-8,8,31)" fill="url(#nt-red)" opacity="0.55"/>
+  <!-- Right laurel -->
+  <ellipse cx="39" cy="21" rx="4" ry="1.6" transform="rotate(30,39,21)" fill="url(#nt-red)" opacity="0.85"/>
+  <ellipse cx="40.5" cy="26" rx="4" ry="1.6" transform="rotate(18,40.5,26)" fill="url(#nt-red)" opacity="0.7"/>
+  <ellipse cx="40" cy="31" rx="3.5" ry="1.4" transform="rotate(8,40,31)" fill="url(#nt-red)" opacity="0.55"/>
+  <!-- N lettermark -->
+  <text x="24" y="35" font-family="'Playfair Display',Georgia,serif" font-size="22" font-weight="700" fill="#ececef" text-anchor="middle">N</text>
+
+  <!-- Wordmark -->
+  <text x="58" y="22" font-family="'Playfair Display',Georgia,serif" font-size="15" font-weight="700" fill="#cfd0d3">Noble</text>
+  <text x="58" y="40" font-family="'Playfair Display',Georgia,serif" font-size="15" font-weight="700" fill="#e53e4e">Transformation</text>
+</svg>
