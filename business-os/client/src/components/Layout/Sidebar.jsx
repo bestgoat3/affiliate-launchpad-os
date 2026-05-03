@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, KanbanSquare, TrendingUp, Megaphone,
-  Users, BookOpen, Settings, LogOut, Rocket, X, Phone,
+  Users, BookOpen, Settings, LogOut, Rocket, X, Phone, Target,
 } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { label: 'Dialer',     icon: Phone,           to: '/dialer',     roles: ['admin','sales'] },
   { label: 'Clients',    icon: Users,           to: '/clients',    roles: ['admin','fulfillment'] },
   { label: 'My Portal',  icon: Users,           to: '/portal',     roles: ['client'] },
+  { label: 'Goals 2026', icon: Target,          to: '/goals',      roles: ['admin','sales','fulfillment','client'] },
   { label: 'Resources',  icon: BookOpen,        to: '/resources',  roles: ['admin','sales','fulfillment','client'] },
   { label: 'Settings',   icon: Settings,        to: '/settings',   roles: ['admin'] },
 ];

@@ -15,7 +15,8 @@ import ClientDetail from './pages/Fulfillment/ClientDetail';
 import MyPortal     from './pages/ClientPortal/MyPortal';
 import ResourceLibrary from './pages/Resources/ResourceLibrary';
 import Settings     from './pages/Settings/Settings';
-import DialerPage   from './pages/Dialer/DialerPage';
+import DialerPage      from './pages/Dialer/DialerPage';
+import GoalsDashboard  from './pages/Goals/GoalsDashboard';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -167,6 +168,9 @@ export default function App() {
                   </RequireRole>
                 }
               />
+
+              {/* Goals */}
+              <Route path="goals" element={<GoalsDashboard />} />
 
               {/* Resources */}
               <Route path="resources" element={<ResourceLibrary />} />
