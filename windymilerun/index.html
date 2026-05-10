@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Windymilerun — Chicago's Saturday Morning Run Club</title>
+  <meta name="description" content="3 miles every Saturday. Live music. Real connections. Coffee after. Chicago's run club, June 6 – October 31, 2026." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #0A0A0A;
+      --bone:   #F4F1EA;
+      --orange: #FF3D00;
+      --yellow: #D4FF00;
+      --muted:  #7A6A5A;
+      --line:   rgba(10,10,10,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bone);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--orange); color: var(--bone); }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bone); }
+    ::-webkit-scrollbar-thumb { background: var(--orange); }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 0;
+      transition: background 0.3s, border-color 0.3s, padding 0.3s;
+    }
+    nav.scrolled {
+      background: var(--bone);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: 1.1rem; letter-spacing: 0.06em;
+      color: var(--orange); text-decoration: none;
+    }
+    .logo span { color: var(--ink); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--bone); background: var(--orange);
+      padding: 10px 22px; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 99;
+      background: var(--ink);
+      flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 1.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--bone); text-decoration: none;
+    }
+    .mobile-menu a:hover { color: var(--orange); }
+    .mobile-close {
+      position: absolute; top: 20px; right: 24px;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.8rem; cursor: pointer; line-height: 1;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      background: var(--ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+    .hero-content { max-width: 800px; }
+    .hero-eyebrow {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.75rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 28px;
+    }
+    .hero-title {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      line-height: 0.95; letter-spacing: -0.02em;
+      color: var(--bone); margin-bottom: 12px;
+    }
+    .hero-title .accent { color: var(--orange); }
+    .hero-sub {
+      font-family: 'Rajdhani', sans-serif; font-weight: 500;
+      font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 32px;
+    }
+    .hero-desc {
+      font-size: 1.05rem; font-weight: 300;
+      color: rgba(244,241,234,0.65);
+      max-width: 520px; margin: 0 auto 44px;
+      line-height: 1.8;
+    }
+    .hero-form {
+      display: flex; max-width: 480px; margin: 0 auto;
+      border: 1px solid rgba(255,61,0,0.3);
+    }
+    .hero-form input {
+      flex: 1; padding: 16px 18px;
+      background: rgba(255,255,255,0.05);
+      border: none; outline: none;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem;
+      color: var(--bone);
+    }
+    .hero-form input::placeholder { color: rgba(244,241,234,0.35); }
+    .hero-form button {
+      padding: 16px 28px; background: var(--orange);
+      border: none; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--bone); white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .hero-form button:hover { opacity: 0.88; }
+    .hero-fine {
+      margin-top: 14px;
+      font-size: 0.75rem; color: rgba(244,241,234,0.35);
+    }
+
+    /* ── STAT BAR ── */
+    .stat-bar {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+    }
+    .stat-track { display: flex; }
+    .stat-item {
+      flex: 1; min-width: 160px;
+      padding: 24px 20px; text-align: center;
+      border-right: 1px solid var(--line);
+    }
+    .stat-item:first-child { border-left: 1px solid var(--line); }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 1.5rem; color: var(--orange);
+      display: block; margin-bottom: 4px;
+    }
+    .stat-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ── SHARED SECTION ── */
+    section { padding: 100px 0; }
+    .eyebrow {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      line-height: 1.1; color: var(--ink); margin-bottom: 18px;
+    }
+    .section-body {
+      font-size: 1rem; font-weight: 300;
+      color: rgba(10,10,10,0.55); line-height: 1.8; max-width: 520px;
+    }
+
+    /* ── ABOUT ── */
+    #about { border-bottom: 1px solid var(--line); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-right {
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .about-badge {
+      background: var(--ink); color: var(--bone);
+      padding: 20px 24px;
+    }
+    .about-badge-num {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 1.8rem; color: var(--orange); display: block; margin-bottom: 4px;
+    }
+    .about-badge-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(244,241,234,0.55);
+    }
+    .about-accent {
+      border-left: 3px solid var(--orange); padding-left: 16px;
+      font-size: 0.95rem; font-weight: 300;
+      color: rgba(10,10,10,0.6); line-height: 1.75;
+    }
+
+    /* ── FEATURES / VIBE ── */
+    #course { background: var(--ink); }
+    #course .eyebrow { color: var(--orange); }
+    #course .section-title { color: var(--bone); }
+    #course .section-body { color: rgba(244,241,234,0.5); }
+    .features-header { text-align: center; max-width: 560px; margin: 0 auto 60px; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(244,241,234,0.1);
+      border: 1px solid rgba(244,241,234,0.1);
+    }
+    .feature-card {
+      background: var(--ink); padding: 36px 28px;
+      border-top: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-top-color: var(--orange); }
+    .feature-num {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.25em; color: rgba(244,241,234,0.3); margin-bottom: 20px;
+    }
+    .feature-icon { font-size: 1.6rem; display: block; margin-bottom: 14px; }
+    .feature-title {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--bone); margin-bottom: 10px;
+    }
+    .feature-body {
+      font-size: 0.875rem; font-weight: 300;
+      color: rgba(244,241,234,0.5); line-height: 1.7;
+    }
+
+    /* ── WHY ── */
+    #why .why-header { max-width: 560px; margin-bottom: 56px; }
+    .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+    .why-item {
+      padding: 32px; border: 1px solid var(--line);
+      margin-top: -1px; margin-left: -1px;
+      display: flex; gap: 18px; align-items: flex-start;
+    }
+    .why-num {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 0.7rem; color: var(--orange);
+      flex-shrink: 0; padding-top: 3px;
+    }
+    .why-title {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.95rem; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--ink); margin-bottom: 6px;
+    }
+    .why-body {
+      font-size: 0.875rem; font-weight: 300;
+      color: rgba(10,10,10,0.5); line-height: 1.7;
+    }
+
+    /* ── TIMELINE ── */
+    #timeline { background: var(--orange); }
+    #timeline .eyebrow { color: rgba(10,10,10,0.5); }
+    #timeline .section-title { color: var(--ink); text-align: center; }
+    #timeline .eyebrow { text-align: center; }
+    .timeline-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin-top: 60px;
+      border: 1px solid rgba(10,10,10,0.15);
+    }
+    .timeline-step {
+      padding: 32px 24px; text-align: center;
+      border-right: 1px solid rgba(10,10,10,0.15);
+    }
+    .timeline-step:last-child { border-right: none; }
+    .timeline-icon { font-size: 1.4rem; margin-bottom: 16px; }
+    .timeline-date {
+      font-family: 'Orbitron', sans-serif; font-size: 0.62rem;
+      letter-spacing: 0.2em; color: rgba(10,10,10,0.55); margin-bottom: 8px;
+    }
+    .timeline-label {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--ink); margin-bottom: 8px;
+    }
+    .timeline-desc {
+      font-size: 0.8rem; font-weight: 300;
+      color: rgba(10,10,10,0.55); line-height: 1.65;
+    }
+
+    /* ── WAITLIST ── */
+    #waitlist { border-top: 1px solid var(--line); }
+    .waitlist-inner {
+      max-width: 620px; margin: 0 auto; text-align: center;
+    }
+    .waitlist-title {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+      line-height: 1.05; color: var(--ink); margin-bottom: 16px;
+    }
+    .waitlist-title span { color: var(--orange); }
+    .waitlist-sub {
+      font-size: 1rem; font-weight: 300;
+      color: rgba(10,10,10,0.5); margin-bottom: 44px; line-height: 1.8;
+    }
+
+    .waitlist-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; }
+    .form-row { display: flex; gap: 14px; }
+    .form-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+      text-align: left;
+    }
+    .form-input {
+      width: 100%; padding: 14px 16px;
+      background: #fff; border: 1px solid rgba(10,10,10,0.12);
+      outline: none;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem;
+      color: var(--ink); transition: border-color 0.2s;
+    }
+    .form-input::placeholder { color: rgba(10,10,10,0.3); }
+    .form-input:focus { border-color: var(--orange); }
+    select.form-input option { background: #fff; color: var(--ink); }
+    .btn-primary {
+      width: 100%; padding: 18px;
+      background: var(--orange); border: none; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.88rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--bone); transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .form-privacy { font-size: 0.74rem; color: var(--muted); }
+    .form-privacy a { color: var(--orange); text-decoration: none; }
+
+    .form-success {
+      display: none; text-align: center; padding: 48px 24px;
+      border: 1px solid var(--line);
+    }
+    .form-success.show { display: block; }
+    .success-icon { font-size: 2.4rem; margin-bottom: 16px; }
+    .success-title {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 1.3rem; color: var(--orange); margin-bottom: 10px;
+    }
+    .success-body { font-size: 0.92rem; font-weight: 300; color: rgba(10,10,10,0.55); line-height: 1.7; }
+
+    .proof-bar {
+      display: flex; justify-content: center;
+      border: 1px solid var(--line); margin-top: 44px;
+    }
+    .proof-item {
+      flex: 1; text-align: center; padding: 24px 12px;
+      border-right: 1px solid var(--line);
+    }
+    .proof-item:last-child { border-right: none; }
+    .proof-num {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 1.4rem; color: var(--orange);
+      display: block; margin-bottom: 4px;
+    }
+    .proof-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ── FAQ ── */
+    #faq { border-top: 1px solid var(--line); }
+    #faq .faq-header { margin-bottom: 48px; }
+    .faq-list { max-width: 720px; }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-q {
+      width: 100%; padding: 22px 0;
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 1rem; letter-spacing: 0.04em;
+      color: var(--ink); text-align: left; transition: color 0.2s;
+    }
+    .faq-q:hover { color: var(--orange); }
+    .faq-icon {
+      flex-shrink: 0; font-size: 1.1rem; color: var(--orange);
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .faq-item.open .faq-a { max-height: 200px; }
+    .faq-a-inner {
+      padding: 0 0 22px;
+      font-size: 0.9rem; font-weight: 300;
+      color: rgba(10,10,10,0.55); line-height: 1.75;
+    }
+
+    /* ── SMS MODAL ── */
+    .sms-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,10,10,0.75);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .sms-overlay.open { opacity: 1; pointer-events: all; }
+    .sms-modal {
+      background: var(--ink); max-width: 460px; width: 100%;
+      padding: 44px 36px; position: relative;
+      transform: translateY(16px); transition: transform 0.3s;
+    }
+    .sms-overlay.open .sms-modal { transform: translateY(0); }
+    .sms-modal-close {
+      position: absolute; top: 14px; right: 18px;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.2rem; cursor: pointer;
+    }
+    .sms-badge {
+      display: inline-block; background: var(--orange); color: var(--bone);
+      font-family: 'Rajdhani', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 3px 10px; margin-bottom: 18px;
+    }
+    .sms-title {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 1.35rem; color: var(--bone); margin-bottom: 10px; line-height: 1.2;
+    }
+    .sms-sub {
+      font-size: 0.875rem; font-weight: 300;
+      color: rgba(244,241,234,0.55); margin-bottom: 24px; line-height: 1.65;
+    }
+    .sms-form { display: flex; flex-direction: column; gap: 12px; }
+    .sms-checkbox-row { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+    .sms-checkbox-row input { margin-top: 3px; accent-color: var(--orange); }
+    .sms-checkbox-label { font-size: 0.82rem; font-weight: 300; color: rgba(244,241,234,0.6); line-height: 1.55; }
+    .sms-tcpa {
+      font-size: 0.7rem; color: rgba(244,241,234,0.35); line-height: 1.6;
+      padding-top: 4px; border-top: 1px solid rgba(244,241,234,0.08);
+    }
+    .sms-skip {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.76rem; color: var(--muted); text-decoration: underline;
+      text-align: center; padding: 0;
+    }
+    .sms-success { display: none; text-align: center; }
+    .sms-success.show { display: block; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--line); padding: 52px 0 36px; }
+    .footer-inner { display: flex; flex-direction: column; gap: 36px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+    .footer-logo {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: 1rem; color: var(--orange); text-decoration: none;
+      letter-spacing: 0.06em; display: block; margin-bottom: 12px;
+    }
+    .footer-logo span { color: var(--ink); }
+    .footer-tagline { font-size: 0.85rem; font-weight: 300; color: var(--muted); line-height: 1.65; max-width: 260px; }
+    .footer-links { display: flex; gap: 60px; flex-wrap: wrap; }
+    .footer-col { display: flex; flex-direction: column; gap: 6px; }
+    .footer-col-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+    .footer-col a { font-size: 0.875rem; font-weight: 300; color: rgba(10,10,10,0.5); text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--orange); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 28px; border-top: 1px solid var(--line);
+      flex-wrap: wrap; gap: 14px;
+    }
+    .footer-copy { font-size: 0.76rem; color: var(--muted); }
+    .footer-social { display: flex; gap: 10px; }
+    .social-btn {
+      width: 34px; height: 34px; border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); text-decoration: none; font-size: 0.8rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ── SCHEDULE GRID ── */
+    .schedule-intro {
+      text-align: center; margin-top: 16px;
+      font-family: 'Rajdhani', sans-serif; font-size: 0.78rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(10,10,10,0.45);
+    }
+    .schedule-months { display: flex; flex-direction: column; margin-top: 48px; border-bottom: 1px solid rgba(10,10,10,0.15); }
+    .schedule-month {
+      border-top: 1px solid rgba(10,10,10,0.15);
+      padding: 18px 0;
+      display: flex; align-items: flex-start; gap: 24px;
+    }
+    .month-name {
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(10,10,10,0.4); width: 90px; flex-shrink: 0; padding-top: 10px;
+    }
+    .date-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .date-chip {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.82rem; letter-spacing: 0.06em;
+      color: var(--ink); background: rgba(10,10,10,0.06);
+      padding: 8px 14px;
+    }
+    .date-chip.kickoff { background: var(--ink); color: var(--bone); }
+    .date-chip.finale { background: var(--orange); color: var(--bone); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .timeline-steps { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      section { padding: 72px 0; }
+      .features-grid { grid-template-columns: 1fr; }
+      .timeline-steps { grid-template-columns: 1fr; }
+      .form-row { flex-direction: column; }
+      .hero-form { flex-direction: column; }
+      .hero-form input, .hero-form button { width: 100%; }
+      .stat-track { flex-wrap: wrap; }
+      .stat-item { min-width: 50%; border-bottom: 1px solid var(--line); }
+      .proof-bar { flex-wrap: wrap; }
+      .proof-item { min-width: 50%; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose" aria-label="Close">✕</button>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#course" onclick="closeMobile()">The Vibe</a>
+  <a href="#timeline" onclick="closeMobile()">Dates</a>
+  <a href="#faq" onclick="closeMobile()">FAQ</a>
+  <a href="#waitlist" onclick="closeMobile()" style="color:var(--orange)">Join Waitlist</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">WINDY<span>MILE</span>RUN</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#course">The Vibe</a></li>
+      <li><a href="#timeline">Dates</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#waitlist" class="nav-cta">Secure My Spot</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Every Saturday · Jun 6 – Oct 31, 2026 · 8AM · Chicago</div>
+    <h1 class="hero-title">
+      RUN THE<br><span class="accent">WIND</span>
+    </h1>
+    <p class="hero-sub">Chicago's Saturday Morning Run Club</p>
+    <p class="hero-desc">
+      3 miles every Saturday. Live music. Real connections. Coffee after. Windymilerun is where Chicago's morning people come to run, meet, and belong — June through October.
+    </p>
+    <form class="hero-form" id="heroForm" onsubmit="handleHeroForm(event)">
+      <input type="email" id="heroEmail" placeholder="Your email address" autocomplete="email" required />
+      <button type="submit">Secure My Spot</button>
+    </form>
+    <p class="hero-fine">Free to join. No race experience needed. Just show up.</p>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="container">
+    <div class="stat-track">
+      <div class="stat-item">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Miles Every Saturday</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">8AM</span>
+        <span class="stat-label">Sharp, Every Week</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">22</span>
+        <span class="stat-label">Saturdays This Season</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Live</span>
+        <span class="stat-label">Music Every Run</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Café</span>
+        <span class="stat-label">After Every Run</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <p class="eyebrow">What Is Windymilerun</p>
+        <h2 class="section-title">Where Morning People<br>Find Their People</h2>
+        <p class="section-body">
+          Every Saturday from June 6th through the last Saturday of October, a group of Chicago's best morning people meets at 8AM for a 3-mile lakefront run. Music playing, strangers becoming friends, and coffee waiting at the end.
+        </p>
+        <p class="section-body" style="margin-top:18px">
+          This isn't a race. There's no timer, no bib, no pressure. Just a great route, great energy, and the kind of community you actually want to be part of on a Saturday morning.
+        </p>
+      </div>
+      <div class="about-right">
+        <div class="about-badge">
+          <span class="about-badge-num">Jun 6</span>
+          <span class="about-badge-label">First Saturday — Season Kickoff</span>
+        </div>
+        <div class="about-badge">
+          <span class="about-badge-num">Oct 31</span>
+          <span class="about-badge-label">Last Saturday — Season Finale</span>
+        </div>
+        <p class="about-accent">
+          North Ave Beach, Chicago. Show up once and you'll understand why people keep coming back every single week.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE VIBE -->
+<section id="course">
+  <div class="container">
+    <div class="features-header">
+      <p class="eyebrow">The Vibe</p>
+      <h2 class="section-title">What Every Saturday<br>Looks Like</h2>
+      <p class="section-body" style="max-width:100%">
+        3 miles. Good music. Great people. One café. That's the whole formula — and it works every single week.
+      </p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01</div>
+        <span class="feature-icon">🌅</span>
+        <div class="feature-title">8AM Lakefront Run</div>
+        <p class="feature-body">We meet at North Ave Beach every Saturday at 8AM and run 3 miles along Chicago's lakefront. Flat, scenic, and the best way to start a weekend.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02</div>
+        <span class="feature-icon">🎵</span>
+        <div class="feature-title">Live Music</div>
+        <p class="feature-body">Every run has a soundtrack. We bring the music so the miles go faster and the energy stays high from start to finish.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03</div>
+        <span class="feature-icon">🤝</span>
+        <div class="feature-title">Network & Connect</div>
+        <p class="feature-body">Entrepreneurs, creatives, professionals — the people who show up at 8AM on a Saturday are exactly the people worth knowing.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04</div>
+        <span class="feature-icon">💛</span>
+        <div class="feature-title">Find Your Person</div>
+        <p class="feature-body">Single? You're not alone. Windymilerun has become one of Chicago's best spots to meet someone who actually shares your values — starting with showing up.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05</div>
+        <span class="feature-icon">☕</span>
+        <div class="feature-title">Café After</div>
+        <p class="feature-body">The run ends but the morning doesn't. The group heads to a local café post-run — coffee, conversation, strangers becoming regulars.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06</div>
+        <span class="feature-icon">📅</span>
+        <div class="feature-title">22 Saturdays</div>
+        <p class="feature-body">June 6th through October 31st — every Saturday. Build a habit, build a community, and make your weekends something to look forward to.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY JOIN -->
+<section id="why">
+  <div class="container">
+    <div class="why-header">
+      <p class="eyebrow">Why Join</p>
+      <h2 class="section-title">Built for Morning People</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-num">01</div>
+        <div>
+          <div class="why-title">No Experience Required</div>
+          <p class="why-body">3 miles at your own pace. Walk, jog, run — no pressure and no judgment. If you can show up at 8AM, you're qualified.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">02</div>
+        <div>
+          <div class="why-title">A Reason to Get Up</div>
+          <p class="why-body">When your Saturday has a standing plan with good people waiting, the alarm hits different. Windymilerun gives you that anchor every week.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">03</div>
+        <div>
+          <div class="why-title">Chicago's Best Backdrop</div>
+          <p class="why-body">Three miles along Lake Michigan with the skyline behind you and the water ahead. There is no better morning view in this city.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">04</div>
+        <div>
+          <div class="why-title">Real People, Real Connections</div>
+          <p class="why-body">Friendships, partnerships, relationships — they all start with showing up to the same place twice. Come twice and you're part of the crew.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">05</div>
+        <div>
+          <div class="why-title">Music That Moves You</div>
+          <p class="why-body">Every run has a live set or curated playlist. Running with music and people is something else entirely.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">06</div>
+        <div>
+          <div class="why-title">The Morning Extends</div>
+          <p class="why-body">Post-run café sessions are where the real conversations happen. Grab a seat, order something good, and let Saturday morning do its thing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="container">
+    <p class="eyebrow" style="text-align:center">The Season</p>
+    <h2 class="section-title" style="text-align:center">22 Saturdays.<br>One Great Summer.</h2>
+    <p class="schedule-intro">North Ave Beach · 8:00 AM · Every Saturday · June – October 2026</p>
+    <div class="schedule-months">
+      <div class="schedule-month">
+        <div class="month-name">June</div>
+        <div class="date-chips">
+          <span class="date-chip kickoff">Jun 6 — Kickoff</span>
+          <span class="date-chip">Jun 13</span>
+          <span class="date-chip">Jun 20</span>
+          <span class="date-chip">Jun 27</span>
+        </div>
+      </div>
+      <div class="schedule-month">
+        <div class="month-name">July</div>
+        <div class="date-chips">
+          <span class="date-chip">Jul 4</span>
+          <span class="date-chip">Jul 11</span>
+          <span class="date-chip">Jul 18</span>
+          <span class="date-chip">Jul 25</span>
+        </div>
+      </div>
+      <div class="schedule-month">
+        <div class="month-name">August</div>
+        <div class="date-chips">
+          <span class="date-chip">Aug 1</span>
+          <span class="date-chip">Aug 8</span>
+          <span class="date-chip">Aug 15</span>
+          <span class="date-chip">Aug 22</span>
+          <span class="date-chip">Aug 29</span>
+        </div>
+      </div>
+      <div class="schedule-month">
+        <div class="month-name">September</div>
+        <div class="date-chips">
+          <span class="date-chip">Sep 5</span>
+          <span class="date-chip">Sep 12</span>
+          <span class="date-chip">Sep 19</span>
+          <span class="date-chip">Sep 26</span>
+        </div>
+      </div>
+      <div class="schedule-month">
+        <div class="month-name">October</div>
+        <div class="date-chips">
+          <span class="date-chip">Oct 3</span>
+          <span class="date-chip">Oct 10</span>
+          <span class="date-chip">Oct 17</span>
+          <span class="date-chip">Oct 24</span>
+          <span class="date-chip finale">Oct 31 — Season Finale 🎃</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist">
+  <div class="container">
+    <div class="waitlist-inner">
+      <p class="eyebrow" style="display:block;text-align:center">Join the Waitlist</p>
+      <h2 class="waitlist-title">Your Saturday Morning<br><span>Starts Here</span></h2>
+      <p class="waitlist-sub">
+        Join the waitlist and be first to know when spots open. You'll get Saturday morning SMS reminders, early access, and a community worth waking up for.
+      </p>
+
+      <div id="waitlistFormWrap">
+        <form class="waitlist-form" id="waitlistForm" onsubmit="handleWaitlist(event)">
+          <input type="hidden" id="kitSource" name="fields[source]" value="organic" />
+          <input type="hidden" id="kitSourceTag" name="fields[source_tag]" value="" />
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-input" placeholder="Jane" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-input" placeholder="Doe" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="jane@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-input" placeholder="+1 (312) 000-0000" autocomplete="tel" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Your Neighborhood</label>
+              <select class="form-input" required>
+                <option value="" disabled selected>Where in Chicago?</option>
+                <option>Lincoln Park</option>
+                <option>Wicker Park / Bucktown</option>
+                <option>Lakeview / Wrigleyville</option>
+                <option>River North / Streeterville</option>
+                <option>West Loop / Fulton Market</option>
+                <option>South Loop / Hyde Park</option>
+                <option>Logan Square / Humboldt Park</option>
+                <option>Suburbs / Visiting</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">How'd You Hear About Us?</label>
+              <select class="form-input" required>
+                <option value="" disabled selected>Select one</option>
+                <option>Instagram</option>
+                <option>TikTok</option>
+                <option>A friend told me</option>
+                <option>Saw it in person</option>
+                <option>Newsletter / email</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Secure My Spot — It's Free →</button>
+          <p class="form-privacy">No payment required. By joining you agree to our <a href="privacy.html">Privacy Policy</a>. Unsubscribe anytime.</p>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">🌅</div>
+          <div class="success-title">See you Saturday morning.</div>
+          <p class="success-body">You're in. Check your inbox for a confirmation. We'll text you the Friday before June 6th with everything you need — location, what to wear, and where we're getting coffee after.</p>
+        </div>
+      </div>
+
+      <div class="proof-bar">
+        <div class="proof-item">
+          <span class="proof-num">22</span>
+          <span class="proof-label">Saturdays This Season</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-num">3</span>
+          <span class="proof-label">Miles Every Week</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-num">8AM</span>
+          <span class="proof-label">Start Time, Always</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-num">Free</span>
+          <span class="proof-label">To Join Waitlist</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="section-title">Questions? Answered.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What exactly is Windymilerun?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Windymilerun is a weekly Saturday morning run club in Chicago. Every Saturday from June 6th through October 31st, we meet at North Ave Beach at 8AM, run 3 miles along the lakefront with music, then head to a local café together. It's a community first, a run club second.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Do I need to be a runner to join?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Not at all. 3 miles is 3 miles — walk it, jog it, run it, or mix it up. We have people of every pace and fitness level. The only requirement is that you show up. Everything else takes care of itself.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Where exactly do we meet?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">North Ave Beach, Chicago — every Saturday at 8AM sharp. Exact meetup spot details go out via SMS the Friday before each run. Join the waitlist to get on the text list.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What if I miss a Saturday?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No problem. There's no attendance requirement and no judgment. Life happens — just show up the next week. With 22 Saturdays in the season, there's plenty of runway to build your streak.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is there really a café after every run?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes — the group heads to a local spot after every single run. It's optional but honestly the best part. The conversations that start on the run continue over coffee. Some of the best connections happen at that table.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What's the deal with the music?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Every run has a live set or a curated playlist keeping the vibe right from the first step to the last. Running with music makes everything better — running with music and a crew makes it unforgettable.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">How do I get Saturday reminders?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">After joining the waitlist, you'll get the option to sign up for Saturday SMS reminders. Every Friday evening you'll get a text with the meetup spot, any route notes, and the café for that week. It's the nudge that makes showing up effortless.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-top">
+      <div>
+        <a href="#" class="footer-logo">WINDY<span>MILE</span>RUN</a>
+        <p class="footer-tagline">Chicago's Saturday morning run club. 3 miles, live music, good people, and coffee after — every week, June through October.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">Event</div>
+          <a href="#about">About</a>
+          <a href="#course">The Vibe</a>
+          <a href="#timeline">Dates</a>
+          <a href="#waitlist">Join Waitlist</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Community</div>
+          <a href="#" id="link-instagram">Instagram</a>
+          <a href="#" id="link-tiktok">TikTok</a>
+          <a href="#" id="link-facebook">Facebook</a>
+          <a href="#" id="link-youtube">YouTube</a>
+          <a href="mailto:karl@windymile.run">Contact</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Windymilerun. Chicago, IL.</p>
+      <div class="footer-social">
+        <a href="#" id="social-instagram" class="social-btn" aria-label="Instagram">IG</a>
+        <a href="#" id="social-tiktok" class="social-btn" aria-label="TikTok">TT</a>
+        <a href="#" id="social-facebook" class="social-btn" aria-label="Facebook">FB</a>
+        <a href="#" id="social-youtube" class="social-btn" aria-label="YouTube">YT</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SMS MODAL -->
+<div class="sms-overlay" id="smsOverlay" role="dialog" aria-modal="true">
+  <div class="sms-modal">
+    <button class="sms-modal-close" onclick="closeSmsModal()">✕</button>
+    <div id="smsFormInner">
+      <div class="sms-badge">Founding Member Perk</div>
+      <h2 class="sms-title">Get Saturday texts, <span id="smsFirstName" style="color:var(--orange)">Runner</span>.</h2>
+      <p class="sms-sub">We'll text you every Friday evening with the meetup spot, route notes, and that week's café. No fluff.</p>
+      <form class="sms-form" id="smsForm" onsubmit="handleSmsForm(event)">
+        <div class="form-group">
+          <label class="form-label" for="smsPhone">Mobile Number</label>
+          <input type="tel" id="smsPhone" class="form-input" placeholder="+1 (312) 000-0000" autocomplete="tel" required style="background:rgba(255,255,255,0.06);border-color:rgba(244,241,234,0.15);color:var(--bone)" />
+        </div>
+        <label class="sms-checkbox-row">
+          <input type="checkbox" id="smsConsent" />
+          <span class="sms-checkbox-label">Send me Friday evening reminders for every Saturday run</span>
+        </label>
+        <p class="sms-tcpa">By submitting, you agree to receive recurring marketing texts from Windy Mile at the number provided. Msg &amp; data rates may apply. Reply STOP to opt out. Reply HELP for help.</p>
+        <button type="submit" class="btn-primary">Send Me Saturday Texts →</button>
+        <div style="text-align:center"><button type="button" class="sms-skip" onclick="closeSmsModal()">No thanks, email only</button></div>
+      </form>
+    </div>
+    <div class="sms-success" id="smsFormSuccess">
+      <div style="font-size:2rem;margin-bottom:12px">📱</div>
+      <div class="success-title" style="font-size:1.1rem;color:var(--orange)">You're in for Saturday texts.</div>
+      <p style="font-size:0.85rem;font-weight:300;color:rgba(244,241,234,0.55);margin-top:8px">First message drops the Friday before our first run. See you out there.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ──
+  var KIT_FORM_ID      = 'FORM_UID';
+  var KIT_API_KEY      = 'YOUR_PUBLIC_API_KEY';
+  var KIT_READY        = KIT_FORM_ID !== 'FORM_UID' && KIT_API_KEY !== 'YOUR_PUBLIC_API_KEY';
+  var SMS_KIT_FORM_ID  = 'SMS_FORM_UID';
+  var SHEETS_ENDPOINT  = 'YOUR_SHEETS_ENDPOINT'; // paste your Apps Script web app URL here
+  var SHEETS_READY     = SHEETS_ENDPOINT !== 'YOUR_SHEETS_ENDPOINT';
+
+  // UTM capture
+  var _utm = (function() {
+    var p = new URLSearchParams(location.search);
+    return { source: p.get('utm_source') || 'organic', campaign: p.get('utm_campaign') || '' };
+  })();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var s = document.getElementById('kitSource');
+    var t = document.getElementById('kitSourceTag');
+    if (s) s.value = _utm.source;
+    if (t) t.value = _utm.campaign;
+    document.getElementById('smsOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeSmsModal();
+    });
+  });
+
+  // Nav
+  var nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobileMenu').classList.add('open');
+  });
+  document.getElementById('mobileClose').addEventListener('click', closeMobile);
+  function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+  // FAQ
+  function toggleFaq(btn) {
+    var item = btn.parentElement;
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); });
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Google Sheets submit
+  function sheetsSubmit(data) {
+    if (!SHEETS_READY) return Promise.resolve();
+    return fetch(SHEETS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(function() {});
+  }
+
+  // Kit subscribe
+  function kitSubscribe(email, firstName, fields) {
+    if (!KIT_READY) { console.warn('[Kit] Not configured.'); return Promise.resolve(true); }
+    return fetch('https://api.convertkit.com/v3/forms/' + KIT_FORM_ID + '/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ api_key: KIT_API_KEY, email: email, first_name: firstName, fields: fields || {} })
+    }).then(function(r) { return r.ok; }).catch(function() { return false; });
+  }
+
+  // Hero form
+  function handleHeroForm(e) {
+    e.preventDefault();
+    var email = document.getElementById('heroEmail').value.trim();
+    if (!email) return;
+    var btn = e.target.querySelector('button');
+    btn.textContent = '...'; btn.disabled = true;
+    kitSubscribe(email, '', { source: _utm.source, source_tag: _utm.campaign }).then(function() {
+      btn.textContent = 'Done ✓';
+      var emailField = document.querySelector('#waitlist .form-input[type="email"]');
+      if (emailField) emailField.value = email;
+      setTimeout(function() { document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' }); }, 400);
+    });
+  }
+
+  // Waitlist form
+  function handleWaitlist(e) {
+    e.preventDefault();
+    var inputs = e.target.querySelectorAll('.form-input');
+    var firstName    = inputs[0].value.trim();
+    var lastName     = inputs[1].value.trim();
+    var email        = inputs[2].value.trim();
+    var phone        = inputs[3].value.trim();
+    var neighborhood = inputs[4].value.trim();
+    var howHeard     = inputs[5].value.trim();
+    var utmSource    = document.getElementById('kitSource').value;
+    var utmCampaign  = document.getElementById('kitSourceTag').value;
+    var btn = e.target.querySelector('.btn-primary');
+    btn.textContent = 'Saving your spot...'; btn.disabled = true;
+    Promise.all([
+      kitSubscribe(email, firstName, { source: utmSource, source_tag: utmCampaign }),
+      sheetsSubmit({ firstName: firstName, lastName: lastName, email: email, phone: phone, neighborhood: neighborhood, howHeard: howHeard, utmSource: utmSource, utmCampaign: utmCampaign })
+    ]).then(function() {
+      e.target.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+      setTimeout(function() {
+        document.getElementById('smsFirstName').textContent = firstName || 'Runner';
+        openSmsModal();
+      }, 1200);
+    });
+  }
+
+  // SMS modal
+  function openSmsModal() {
+    document.getElementById('smsOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSmsModal() {
+    document.getElementById('smsOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleSmsForm(e) {
+    e.preventDefault();
+    var phone = document.getElementById('smsPhone').value.trim();
+    var consented = document.getElementById('smsConsent').checked;
+    if (!consented) { alert('Please check the consent box.'); return; }
+    var btn = e.target.querySelector('.btn-primary');
+    btn.textContent = 'Saving...'; btn.disabled = true;
+    document.getElementById('smsFormInner').style.display = 'none';
+    document.getElementById('smsFormSuccess').classList.add('show');
+    setTimeout(closeSmsModal, 2200);
+  }
+</script>
+</body>
+</html>
