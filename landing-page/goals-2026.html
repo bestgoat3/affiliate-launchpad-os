@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GOALS 2026 — Mission Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E5C46A;
+    --dark: #080808;
+    --card: #111111;
+    --card2: #161616;
+    --border: #222;
+    --border2: #2a2a2a;
+    --text: #e8e8e8;
+    --muted: #555;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--dark);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar{width:5px;height:5px}
+  ::-webkit-scrollbar-track{background:#111}
+  ::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+
+  /* ── Grid overlay utility ── */
+  .grid-bg{
+    background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);
+    background-size:40px 40px;
+  }
+
+  /* ── Typography ── */
+  .orb{font-family:'Orbitron',monospace}
+  .mono{font-family:'Courier New',monospace}
+
+  /* ── Glow text ── */
+  .glow-gold{text-shadow:0 0 24px rgba(201,168,76,.7)}
+  .gradient-text{
+    background:linear-gradient(135deg,#C9A84C 0%,#fff 45%,#C9A84C 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+  }
+
+  /* ── Hero ── */
+  #hero{
+    position:relative;padding:48px 24px 36px;text-align:center;
+    border-bottom:1px solid #1a1a1a;overflow:hidden;
+  }
+  #hero::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(201,168,76,.07) 0%,transparent 70%);
+  }
+  #hero h1{font-size:clamp(2rem,6vw,4rem);font-weight:900;letter-spacing:.12em;margin-bottom:6px}
+  #hero .subtitle{color:var(--muted);font-size:.75rem;letter-spacing:.35em;text-transform:uppercase;margin-bottom:28px}
+
+  /* ── Countdown ── */
+  #countdown{
+    display:inline-flex;align-items:center;gap:clamp(12px,3vw,32px);
+    background:#0d0d0d;border:1px solid rgba(201,168,76,.2);
+    border-radius:16px;padding:16px 32px;
+    box-shadow:0 0 30px rgba(201,168,76,.05);
+  }
+  .cd-unit{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .cd-val{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;
+          color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,.6);line-height:1}
+  .cd-label{font-size:.6rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+  .cd-sep{font-family:'Orbitron',monospace;font-size:1.8rem;color:rgba(201,168,76,.25);font-weight:900}
+
+  /* ── Stat strip ── */
+  #stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:680px;margin:28px auto 0}
+  .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center}
+  .stat-val{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;margin-bottom:2px}
+  .stat-lbl{font-size:.6rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+
+  /* ── Tabs ── */
+  #tabs{
+    position:sticky;top:0;z-index:50;background:rgba(8,8,8,.95);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+    display:flex;overflow-x:auto;scrollbar-width:none;
+  }
+  #tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex-shrink:0;padding:14px 20px;font-size:.75rem;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;cursor:pointer;
+    border-bottom:2px solid transparent;color:var(--muted);
+    transition:all .2s;white-space:nowrap;
+  }
+  .tab:hover{color:#aaa}
+  .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+  /* ── Content panels ── */
+  .panel{display:none;padding:28px 20px;max-width:1200px;margin:0 auto}
+  .panel.active{display:block}
+
+  /* ── Phase headers ── */
+  .phase-header{
+    display:flex;align-items:center;gap:12px;margin-bottom:16px;margin-top:32px;
+  }
+  .phase-header:first-child{margin-top:0}
+  .phase-num{
+    width:30px;height:30px;border-radius:8px;background:var(--card);
+    border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;
+    font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;color:var(--gold);flex-shrink:0;
+  }
+  .phase-title{font-size:.65rem;font-weight:700;letter-spacing:.25em;color:#444;text-transform:uppercase}
+  .phase-line{flex:1;height:1px;background:var(--border)}
+  .phase-count{font-size:.65rem;color:#333}
+
+  /* ── Phase filter ── */
+  #phase-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .pf-btn{
+    font-size:.65rem;font-weight:700;letter-spacing:.15em;padding:6px 14px;
+    border-radius:8px;border:1px solid var(--border2);background:var(--card);
+    color:var(--muted);cursor:pointer;transition:all .2s;text-transform:uppercase;
+  }
+  .pf-btn:hover{color:#ccc;border-color:#444}
+  .pf-btn.active{background:var(--gold);color:#000;border-color:var(--gold)}
+
+  /* ── Goals grid ── */
+  .goals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+
+  /* ── Goal card ── */
+  .goal-card{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    overflow:hidden;transition:border-color .25s,box-shadow .25s;
+  }
+  .goal-card.done{border-color:var(--done-color,var(--gold))}
+  .goal-card-body{padding:14px}
+  .gc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .gc-info{flex:1;min-width:0}
+  .gc-emoji{font-size:1.2rem;margin-bottom:4px}
+  .gc-title{font-size:.8rem;font-weight:600;line-height:1.35;color:#ddd;margin-bottom:4px}
+  .phase-badge{
+    display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:.12em;
+    padding:2px 6px;border-radius:4px;border:1px solid;text-transform:uppercase;
+  }
+  .gc-pct{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:700}
+
+  /* Progress bar */
+  .pb-wrap{margin-bottom:6px}
+  .pb-meta{display:flex;justify-content:space-between;font-size:.65rem;margin-bottom:4px}
+  .pb-current{color:#888;font-family:'Courier New',monospace}
+  .pb-target{color:#444;font-family:'Courier New',monospace}
+  .pb-track{height:5px;border-radius:99px;background:#1a1a1a;overflow:hidden}
+  .pb-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+  /* Controls */
+  .gc-controls{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+  .gc-btns{display:flex;gap:5px}
+  .btn-ctrl{
+    width:28px;height:28px;border-radius:8px;border:1px solid var(--border2);
+    background:var(--dark);color:#aaa;cursor:pointer;font-size:.9rem;
+    display:flex;align-items:center;justify-content:center;transition:all .15s;
+  }
+  .btn-ctrl:hover{color:#fff;background:#1a1a1a}
+  .btn-ctrl.plus{color:#000;border-color:transparent}
+  .btn-expand{
+    font-size:.65rem;color:var(--muted);background:none;border:none;cursor:pointer;
+    display:flex;align-items:center;gap:4px;transition:color .15s;
+  }
+  .btn-expand:hover{color:#aaa}
+
+  /* Expanded detail */
+  .gc-detail{
+    border-top:1px solid rgba(255,255,255,.05);padding:12px 14px;
+    display:none;gap:8px;flex-direction:column;
+  }
+  .gc-detail.open{display:flex}
+  .detail-row{display:flex;gap:8px;align-items:flex-start}
+  .detail-icon{font-size:.75rem;flex-shrink:0;margin-top:1px}
+  .detail-text{font-size:.72rem;color:#888;line-height:1.5}
+
+  /* Done trophy */
+  .trophy-badge{font-size:.95rem;flex-shrink:0}
+
+  /* ── Daily Checklist ── */
+  #daily-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+  #daily-meta h2{font-size:1.1rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+  .daily-date{color:var(--muted);font-size:.75rem;margin-top:2px}
+  #daily-progress-wrap{margin-bottom:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+  .dp-row{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:8px}
+  .dp-pct{font-family:'Orbitron',monospace;font-weight:700;color:var(--gold)}
+
+  .cl-group-title{font-size:.6rem;letter-spacing:.25em;color:#333;text-transform:uppercase;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+  .cl-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  .cl-item{
+    display:flex;align-items:flex-start;gap:12px;padding:11px 14px;
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    cursor:pointer;transition:all .2s;margin-bottom:6px;text-align:left;width:100%;
+  }
+  .cl-item:hover{border-color:#333}
+  .cl-item.done{border-color:#1f3d2a}
+  .cl-check{width:20px;height:20px;border-radius:50%;border:2px solid #333;
+            flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s}
+  .cl-item.done .cl-check{background:#22c55e;border-color:#22c55e}
+  .cl-check-mark{color:#fff;font-size:.7rem;display:none}
+  .cl-item.done .cl-check-mark{display:block}
+  .cl-emoji{font-size:.9rem;flex-shrink:0;margin-top:1px}
+  .cl-content{flex:1;min-width:0}
+  .cl-title{font-size:.78rem;font-weight:600;color:#ccc;margin-bottom:2px}
+  .cl-item.done .cl-title{text-decoration:line-through;color:#444}
+  .cl-task{font-size:.68rem;color:#555}
+  .cl-item.done .cl-task{color:#333}
+
+  #daily-complete{
+    display:none;margin-top:20px;padding:20px;border-radius:14px;text-align:center;
+    background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);
+  }
+  #daily-complete .trophy{font-size:2rem;margin-bottom:8px}
+  #daily-complete h3{color:#22c55e;font-weight:800;letter-spacing:.15em;font-size:.9rem;text-transform:uppercase}
+  #daily-complete p{color:#555;font-size:.75rem;margin-top:6px}
+
+  .btn-reset{
+    padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--card);
+    color:var(--muted);font-size:.65rem;font-weight:700;letter-spacing:.12em;cursor:pointer;
+    text-transform:uppercase;transition:all .2s;display:flex;align-items:center;gap:6px;
+  }
+  .btn-reset:hover{color:#ccc;border-color:#444}
+  .done-counter{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:8px 14px;text-align:center;
+  }
+  .done-counter .val{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:700;color:var(--gold)}
+  .done-counter .lbl{font-size:.55rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+
+  /* ── Schedule ── */
+  #schedule-panel h2{font-size:1.1rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
+  #schedule-panel .sub{color:var(--muted);font-size:.75rem;margin-bottom:24px}
+  .timeline{position:relative;max-width:680px}
+  .timeline::before{content:'';position:absolute;left:82px;top:0;bottom:0;width:1px;background:var(--border)}
+  .tl-item{display:flex;gap:16px;margin-bottom:4px}
+  .tl-time{width:66px;flex-shrink:0;text-align:right;font-family:'Courier New',monospace;font-size:.65rem;color:#444;padding-top:12px}
+  .tl-dot-wrap{flex-shrink:0;padding-top:10px;position:relative;z-index:1}
+  .tl-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--dark)}
+  .tl-content{
+    flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;margin-bottom:1px;transition:border-color .2s;
+  }
+  .tl-content:hover{border-color:#333}
+  .tl-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .tl-task{font-size:.75rem;color:#ccc;flex:1}
+  .tl-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .tl-dur{font-size:.6rem;font-family:'Courier New',monospace;color:#333}
+  .tl-cat{font-size:.55rem;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.1em;text-transform:capitalize}
+
+  .flame-box{
+    margin-top:24px;padding:16px;border-radius:12px;text-align:center;
+    background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);
+  }
+  .flame-box .flame{font-size:1.5rem;margin-bottom:6px}
+  .flame-box p{color:var(--gold);font-weight:700;letter-spacing:.15em;font-size:.75rem;text-transform:uppercase}
+  .flame-box small{color:#444;font-size:.65rem;display:block;margin-top:4px}
+
+  /* ── Charts ── */
+  #chart-panel h2{font-size:1.1rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
+  #chart-panel .sub{color:var(--muted);font-size:.75rem;margin-bottom:24px}
+  .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  @media(max-width:640px){.chart-grid{grid-template-columns:1fr}}
+  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+  .chart-card h3{font-size:.6rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+
+  /* Donut */
+  .donut-wrap{position:relative;width:160px;height:160px;margin:0 auto 12px}
+  .donut-svg{transform:rotate(-90deg)}
+  .donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .donut-pct{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:900;color:var(--gold)}
+  .donut-lbl{font-size:.55rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:2px}
+  .donut-stats{display:flex;justify-content:center;gap:24px;margin-top:8px}
+  .ds-item{text-align:center}
+  .ds-val{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700}
+  .ds-lbl{font-size:.55rem;color:#333;letter-spacing:.15em;text-transform:uppercase}
+
+  /* Category bars */
+  .cat-bar-item{margin-bottom:12px}
+  .cat-bar-row{display:flex;justify-content:space-between;font-size:.65rem;margin-bottom:4px}
+  .cat-bar-name{color:#888;text-transform:capitalize}
+  .cat-bar-pct{font-family:'Courier New',monospace;font-weight:700}
+  .cat-bar-track{height:6px;border-radius:99px;background:#1a1a1a;overflow:hidden}
+  .cat-bar-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+
+  /* Phase bars */
+  .phase-bar-item{margin-bottom:14px}
+  .phase-bar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+  .phase-tag{font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:5px;letter-spacing:.1em;text-transform:uppercase}
+  .phase-bar-right{display:flex;align-items:center;gap:10px;font-size:.65rem;color:#444}
+  .phase-bar-pct{font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700}
+  .phase-track{height:7px;border-radius:99px;background:#1a1a1a;overflow:hidden}
+  .phase-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+
+  /* All goals list in chart tab */
+  .all-goals-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+  .all-goals-card h3{font-size:.6rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+  .ag-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .ag-emoji{font-size:.95rem;width:20px;flex-shrink:0;text-align:center}
+  .ag-right{flex:1;min-width:0}
+  .ag-row{display:flex;justify-content:space-between;font-size:.65rem;margin-bottom:3px}
+  .ag-title{color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px}
+  .ag-pct{font-family:'Courier New',monospace;font-weight:700;flex-shrink:0}
+  .ag-bar{height:3px;border-radius:99px;background:#1a1a1a;overflow:hidden}
+  .ag-fill{height:100%;border-radius:99px}
+
+  @media(max-width:600px){
+    #stats{grid-template-columns:repeat(2,1fr)}
+    .goals-grid{grid-template-columns:1fr}
+    #countdown{padding:12px 18px;gap:16px}
+    .cd-val{font-size:1.4rem}
+  }
+
+  /* Pulse animation for countdown */
+  @keyframes pulse-glow{
+    0%,100%{text-shadow:0 0 20px rgba(201,168,76,.5)}
+    50%{text-shadow:0 0 35px rgba(201,168,76,.9),0 0 60px rgba(201,168,76,.3)}
+  }
+  .cd-val{animation:pulse-glow 2s ease-in-out infinite}
+
+  /* Completion shine */
+  @keyframes shine{
+    0%{background-position:-200% center}
+    100%{background-position:200% center}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ HERO ════════════════════════════════ -->
+<div id="hero" class="grid-bg">
+  <p style="font-size:.65rem;letter-spacing:.4em;color:rgba(201,168,76,.5);font-family:'Courier New',monospace;margin-bottom:10px">
+    PERSONAL MISSION CONTROL
+  </p>
+  <h1 class="orb gradient-text">GOALS 2026</h1>
+  <p class="subtitle">Vision to Victory · Deadline: October 1st, 2026</p>
+
+  <div id="countdown">
+    <div class="cd-unit"><span class="cd-val" id="cd-days">000</span><span class="cd-label">Days</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-val" id="cd-hrs">00</span><span class="cd-label">Hrs</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-val" id="cd-min">00</span><span class="cd-label">Min</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-val" id="cd-sec">00</span><span class="cd-label">Sec</span></div>
+  </div>
+
+  <div id="stats">
+    <div class="stat-box">
+      <div class="stat-val glow-gold" id="s-pct" style="color:var(--gold)">0%</div>
+      <div class="stat-lbl">Overall</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="s-done" style="color:#22c55e">0/30</div>
+      <div class="stat-lbl">Completed</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="s-active" style="color:#60a5fa">0</div>
+      <div class="stat-lbl">Active</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="s-day" style="color:#f97316">Day 1</div>
+      <div class="stat-lbl">of 151</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TABS ════════════════════════════════ -->
+<div id="tabs">
+  <div class="tab active" onclick="showTab('goals')">🎯 Goals</div>
+  <div class="tab" onclick="showTab('daily')">✅ Today's Plan</div>
+  <div class="tab" onclick="showTab('schedule')">⏰ Daily Schedule</div>
+  <div class="tab" onclick="showTab('chart')">📊 Progress Chart</div>
+</div>
+
+<!-- ═══════════════════════════════ GOALS PANEL ══════════════════════ -->
+<div id="goals-panel" class="panel active">
+  <div id="phase-filters"></div>
+  <div id="goals-container"></div>
+</div>
+
+<!-- ═══════════════════════════════ DAILY PANEL ══════════════════════ -->
+<div id="daily-panel" class="panel">
+  <div id="daily-meta">
+    <div>
+      <h2 class="orb">TODAY'S MISSION</h2>
+      <div class="daily-date" id="today-label"></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="done-counter">
+        <div class="val" id="cl-done-count">0/30</div>
+        <div class="lbl">Done</div>
+      </div>
+      <button class="btn-reset" onclick="resetChecklist()">↺ Reset</button>
+    </div>
+  </div>
+  <div id="daily-progress-wrap">
+    <div class="dp-row">
+      <span style="color:#666;font-size:.7rem">Daily Progress</span>
+      <span class="dp-pct" id="cl-pct">0%</span>
+    </div>
+    <div class="pb-track">
+      <div class="pb-fill" id="cl-bar" style="width:0%;background:linear-gradient(90deg,#C9A84C88,#C9A84C)"></div>
+    </div>
+  </div>
+  <div id="checklist-container"></div>
+  <div id="daily-complete">
+    <div class="trophy">🏆</div>
+    <h3>MISSION COMPLETE</h3>
+    <p>All tasks done for today. Exceptional execution.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCHEDULE PANEL ════════════════════ -->
+<div id="schedule-panel" class="panel">
+  <h2 class="orb">OPTIMAL DAILY SCHEDULE</h2>
+  <div class="sub">Your 16.5-hour execution blueprint — repeat 151 days straight</div>
+  <div class="timeline" id="schedule-container"></div>
+  <div class="flame-box">
+    <div class="flame">🔥</div>
+    <p>151 DAYS OF THIS = YOUR DESTINY</p>
+    <small>Not every day perfect — but every day present.</small>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CHART PANEL ═══════════════════════ -->
+<div id="chart-panel" class="panel">
+  <h2 class="orb">PROGRESS CHART</h2>
+  <div class="sub">Live snapshot of all goals — updates as you track</div>
+  <div class="chart-grid">
+    <!-- Donut -->
+    <div class="chart-card">
+      <h3>Overall Mission</h3>
+      <div class="donut-wrap">
+        <svg class="donut-svg" width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="62" fill="none" stroke="#1a1a1a" stroke-width="14"/>
+          <circle id="donut-arc" cx="80" cy="80" r="62" fill="none" stroke="#C9A84C" stroke-width="14"
+                  stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6"
+                  style="transition:stroke-dashoffset 1s ease;filter:drop-shadow(0 0 6px rgba(201,168,76,.5))"/>
+        </svg>
+        <div class="donut-center">
+          <div class="donut-pct" id="donut-pct">0%</div>
+          <div class="donut-lbl">Complete</div>
+        </div>
+      </div>
+      <div class="donut-stats">
+        <div class="ds-item"><div class="ds-val" id="ds-done" style="color:#22c55e">0</div><div class="ds-lbl">Done</div></div>
+        <div class="ds-item"><div class="ds-val" id="ds-active" style="color:#60a5fa">0</div><div class="ds-lbl">Active</div></div>
+        <div class="ds-item"><div class="ds-val" id="ds-pending" style="color:#555">30</div><div class="ds-lbl">Pending</div></div>
+      </div>
+    </div>
+    <!-- Category bars -->
+    <div class="chart-card">
+      <h3>By Category</h3>
+      <div id="cat-bars"></div>
+    </div>
+  </div>
+  <!-- Phase bars -->
+  <div class="chart-card" style="margin-bottom:16px">
+    <h3>Phase Breakdown</h3>
+    <div id="phase-bars"></div>
+  </div>
+  <!-- All goals list -->
+  <div class="all-goals-card">
+    <h3>All Goals Tracker</h3>
+    <div id="all-goals-list"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════════════════
+
+const DEADLINE   = new Date('2026-10-01T00:00:00');
+const START_DATE = new Date('2026-05-03T00:00:00');
+const TOTAL_DAYS = 151;
+
+const CAT_COLOR = {
+  spiritual:'#A78BFA', financial:'#34D399', health:'#F97316',
+  personal:'#60A5FA',  social:'#EC4899',    community:'#FBBF24',
+  business:'#C9A84C',  income:'#10B981',    lifestyle:'#EF4444',
+  impact:'#06B6D4',    family:'#F472B6',
+};
+
+const PHASE_COLOR = ['#A78BFA','#F97316','#60A5FA','#FBBF24','#EC4899','#10B981','#C9A84C'];
+
+const GOALS = [
+  // ── P1 IMMEDIATE ──────────────────────────────────────────────────────────
+  {id:'god',      p:1,pn:'IMMEDIATE',  cat:'spiritual', e:'✝️', t:'Stronger Relationship with God',
+   target:TOTAL_DAYS, unit:'days',  def:0,
+   task:'Morning prayer + 1 Bible chapter before phone (30 min)',
+   tip:"Use YouVersion — set a 5am reminder. God first, everything else follows."},
+  {id:'daughter', p:1,pn:'IMMEDIATE',  cat:'family',    e:'👧', t:'Quality Time with Daughter',
+   target:TOTAL_DAYS, unit:'days',  def:0,
+   task:'1-hour uninterrupted, no phone — read, play, just be present',
+   tip:"She doesn't need a perfect parent — just a present one."},
+  {id:'amex',     p:1,pn:'IMMEDIATE',  cat:'financial', e:'💳', t:'Amex Platinum & Gold Cards',
+   target:2, unit:'cards', def:0,
+   task:'Apply at AmericanExpress.com today (30 min, check pre-qual first)',
+   tip:'No hard pull on pre-qualification — do it today before you forget.'},
+  {id:'roth',     p:1,pn:'IMMEDIATE',  cat:'financial', e:'📈', t:"Roth IRA for Daughter",
+   target:1, unit:'account', def:0,
+   task:"Open custodial Roth IRA on Fidelity or Vanguard (20 min online)",
+   tip:'$7K/yr max — tax-free compound growth for her lifetime. Do it NOW.'},
+  {id:'life-pol', p:1,pn:'IMMEDIATE',  cat:'financial', e:'🛡️', t:'$1M Life Insurance Policy',
+   target:1, unit:'policy', def:0,
+   task:'Apply via PolicyGenius for $1M 20-year term life insurance',
+   tip:"Protect your daughter's future — it's cheaper than you think."},
+
+  // ── P2 SHORT TERM ─────────────────────────────────────────────────────────
+  {id:'fighting', p:2,pn:'SHORT TERM', cat:'health',    e:'🥋', t:'Learn New Fighting Style',
+   target:40, unit:'sessions', def:0,
+   task:'Train 45 min: BJJ / Muay Thai / boxing — 3× per week',
+   tip:'Enroll in a gym THIS week — momentum beats motivation.'},
+  {id:'weight',   p:2,pn:'SHORT TERM', cat:'health',    e:'💪', t:'Gain 25 Pounds (In Shape)',
+   target:25, unit:'lbs', def:0,
+   task:'Gym session + eat 3,500+ cals / 200g protein daily',
+   tip:'~0.5 lb lean gain/week is optimal — trust the process.'},
+  {id:'credit',   p:2,pn:'SHORT TERM', cat:'financial', e:'⭐', t:'800+ Credit Score',
+   target:800, unit:'pts', def:720,
+   task:'Pay all bills on time, keep utilization under 10%',
+   tip:'Check Credit Karma daily — dispute errors immediately.'},
+  {id:'relation', p:2,pn:'SHORT TERM', cat:'personal',  e:'❤️', t:'Healthiest Relationship',
+   target:1, unit:'goal', def:0,
+   task:'Invest intentional daily energy into your love life',
+   tip:'Clarity attracts — define what you want and become it.'},
+
+  // ── P3 MEDIUM TERM ────────────────────────────────────────────────────────
+  {id:'books',    p:3,pn:'MEDIUM TERM',cat:'personal',  e:'📚', t:'Read 40 Books',
+   target:40, unit:'books', def:0,
+   task:'Read 45 pages min (Audible counts — listen during workouts)',
+   tip:'40 books / 21 weeks = 2 books/week — totally doable.'},
+  {id:'videos',   p:3,pn:'MEDIUM TERM',cat:'social',    e:'🎬', t:'Record 1,500 Videos',
+   target:1500, unit:'videos', def:0,
+   task:'Batch-record 10 videos/day — 90-min shoot session',
+   tip:'Same outfit, 10 hooks, 10 cuts. Efficient and consistent.'},
+  {id:'travel',   p:3,pn:'MEDIUM TERM',cat:'personal',  e:'✈️', t:'Travel 4 Countries',
+   target:4, unit:'countries', def:0,
+   task:'Book 1 international trip (months 2, 3, 4, 5)',
+   tip:'Combine with content — every country = viral travel content.'},
+  {id:'pdev',     p:3,pn:'MEDIUM TERM',cat:'personal',  e:'🎓', t:'$250K Personal Development',
+   target:250000, unit:'$', def:0,
+   task:'Invest daily in courses, coaching, masterminds & events',
+   tip:'Every $1 invested in yourself returns $10. Pay the tuition.'},
+  {id:'africa',   p:3,pn:'MEDIUM TERM',cat:'impact',    e:'🌍', t:'Build Houses in Africa',
+   target:1, unit:'project', def:0,
+   task:'Allocate $500/day to Africa housing fund — research NGOs',
+   tip:'Legacy > luxury. Start the fund today.'},
+
+  // ── P4 COMMUNITY ──────────────────────────────────────────────────────────
+  {id:'comm',     p:4,pn:'COMMUNITY',  cat:'community', e:'🏘️', t:'1,200 Online Community Members',
+   target:1200, unit:'members', def:0,
+   task:'Onboard 8+ new members daily + deliver value',
+   tip:'Skool or Discord — invite 20 people per day minimum.'},
+  {id:'runclub',  p:4,pn:'COMMUNITY',  cat:'community', e:'🏃', t:'Run Club / Community 10K Members',
+   target:10000, unit:'members', def:0,
+   task:'Host weekly in-person run, post club content daily',
+   tip:'Partner with local gyms. Post to Meetup & Eventbrite.'},
+  {id:'employees',p:4,pn:'COMMUNITY',  cat:'business',  e:'👥', t:'20 Employees',
+   target:20, unit:'hires', def:0,
+   task:'Post 1 job listing + conduct 1 interview daily',
+   tip:'Start with VAs, editors, setters and closers first.'},
+
+  // ── P5 SOCIAL GROWTH ──────────────────────────────────────────────────────
+  {id:'youtube',  p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'▶️', t:'1M YouTube Subscribers',
+   target:1000000, unit:'subs', def:0,
+   task:'Post 1-2 YouTube videos + engage comments 20 min',
+   tip:'Long-form (10-20 min) + Shorts. Consistency wins.'},
+  {id:'instagram',p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'📸', t:'2M Instagram Followers',
+   target:2000000, unit:'followers', def:0,
+   task:'Post 3 Reels + Stories, engage for 30 min',
+   tip:'Reels 7–15 sec perform best — hook in 2 seconds.'},
+  {id:'tiktok',   p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'🎵', t:'2M TikTok Followers',
+   target:2000000, unit:'followers', def:0,
+   task:'Post 5 TikToks, reply to every comment',
+   tip:'Post 7–9 AM or 7–9 PM for maximum reach.'},
+  {id:'facebook', p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'📘', t:'2M Facebook Followers',
+   target:2000000, unit:'followers', def:0,
+   task:'Post 2 videos + go live once weekly',
+   tip:'Cross-post your Reels/TikToks — repurpose everything.'},
+  {id:'xtwitter', p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'𝕏', t:'1M X / Twitter Followers',
+   target:1000000, unit:'followers', def:0,
+   task:'Post 8-10 threads/tweets + reply to 20 big accounts',
+   tip:'Threads + hot takes in your niche = viral growth.'},
+  {id:'snapchat', p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'👻', t:'1M Snapchat Followers',
+   target:1000000, unit:'followers', def:0,
+   task:'Post 3 Stories + 1 Spotlight video daily',
+   tip:'Raw, behind-the-scenes content wins on Snap.'},
+  {id:'rumble',   p:5,pn:'SOCIAL GROWTH',cat:'social',  e:'⚡', t:'1M Rumble Followers',
+   target:1000000, unit:'followers', def:0,
+   task:'Mirror all videos to Rumble — cross-post everything',
+   tip:'Rumble rewards consistent reposts — set up auto-upload.'},
+
+  // ── P6 REVENUE ────────────────────────────────────────────────────────────
+  {id:'tktaff',   p:6,pn:'REVENUE',    cat:'income',    e:'💰', t:'$500K TikTok Affiliate',
+   target:500000, unit:'$', def:0,
+   task:'Push 2 high-ticket affiliate products per day on TikTok',
+   tip:'$500K / 151 days = $3,311/day — go high-ticket only.'},
+  {id:'lifeinc',  p:6,pn:'REVENUE',    cat:'income',    e:'🏦', t:'$500K Life Insurance Income',
+   target:500000, unit:'$', def:0,
+   task:'Make 20 prospecting calls daily, close 2+ policies',
+   tip:'$3,311/day pace — avg policy ~$1,200 commission.'},
+  {id:'launchpad',p:6,pn:'REVENUE',    cat:'income',    e:'🚀', t:'$2M from Affiliate Launchpad',
+   target:2000000, unit:'$', def:0,
+   task:'Close 2+ Affiliate Launchpad deals daily',
+   tip:'$13,245/day pace — raise prices, increase volume.'},
+  {id:'liquid',   p:6,pn:'REVENUE',    cat:'financial', e:'💵', t:'$2M Liquid',
+   target:2000000, unit:'$', def:0,
+   task:'Track liquid assets daily — move profits to savings',
+   tip:'Liquid = cash + accessible investments. Protect it.'},
+
+  // ── P7 LEGACY ─────────────────────────────────────────────────────────────
+  {id:'m3',       p:7,pn:'LEGACY',     cat:'lifestyle', e:'🏎️', t:'BMW M3',
+   target:1, unit:'car', def:0,
+   task:'Hit revenue milestones — M3 is the earned reward',
+   tip:'Set as reward at $1.5M liquid — discipline first.'},
+  {id:'giveback', p:7,pn:'LEGACY',     cat:'impact',    e:'🤲', t:'Give Back $100K',
+   target:100000, unit:'$', def:0,
+   task:'Allocate 5% of all income to giving — automate it',
+   tip:"You can't out-give God. Give first, scale faster."},
+  {id:'pspend',   p:7,pn:'LEGACY',     cat:'personal',  e:'🏆', t:'$250K Personal Dev Spent',
+   target:250000, unit:'$', def:0,
+   task:'Book masterminds, elite events & coaching programs',
+   tip:'A room full of people further ahead = fastest path.'},
+];
+
+const SCHEDULE = [
+  {time:'5:00 AM', task:'Wake up + 32oz water immediately',                   cat:'health',    dur:'5 min'},
+  {time:'5:05 AM', task:'Prayer + 1 Bible chapter (NO phone first)',           cat:'spiritual', dur:'30 min'},
+  {time:'5:35 AM', task:'Read 45 pages minimum (toward 40 books)',             cat:'personal',  dur:'45 min'},
+  {time:'6:20 AM', task:'Gym — strength training (25 lbs gain program)',       cat:'health',    dur:'60 min'},
+  {time:'7:20 AM', task:'Shower + high-protein breakfast (200g protein)',      cat:'health',    dur:'25 min'},
+  {time:'7:45 AM', task:'Batch record 10 videos (content block)',              cat:'social',    dur:'90 min'},
+  {time:'9:15 AM', task:'Schedule + post content on all 7 platforms',         cat:'social',    dur:'30 min'},
+  {time:'9:45 AM', task:'Life insurance — 20 prospecting calls',               cat:'income',    dur:'120 min'},
+  {time:'11:45 AM',task:'Community: engage + onboard 8 new members',          cat:'community', dur:'30 min'},
+  {time:'12:15 PM',task:'Lunch break',                                         cat:'health',    dur:'30 min'},
+  {time:'12:45 PM',task:'Affiliate Launchpad — sales calls & closes',         cat:'income',    dur:'120 min'},
+  {time:'2:45 PM', task:'TikTok affiliate — optimize & push products',        cat:'income',    dur:'60 min'},
+  {time:'3:45 PM', task:'Team management + hiring interviews',                 cat:'business',  dur:'60 min'},
+  {time:'4:45 PM', task:'Run club / martial arts training',                    cat:'community', dur:'60 min'},
+  {time:'5:45 PM', task:'1-hour UNINTERRUPTED time with daughter',             cat:'family',    dur:'60 min'},
+  {time:'6:45 PM', task:'Dinner + review finances / credit score',             cat:'financial', dur:'30 min'},
+  {time:'7:15 PM', task:'Personal development — course or coaching call',      cat:'personal',  dur:'60 min'},
+  {time:'8:15 PM', task:'Reply to all comments across every platform',         cat:'social',    dur:'45 min'},
+  {time:'9:00 PM', task:'Evening reflection + gratitude journal',              cat:'spiritual', dur:'15 min'},
+  {time:'9:15 PM', task:'Wind down — NO screens after 9:30pm',                cat:'health',    dur:'15 min'},
+  {time:'9:30 PM', task:'Sleep (7.5 hours)',                                   cat:'health',    dur:'450 min'},
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════════════════
+
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem('g2026_progress') || '{}'); } catch { return {}; }
+}
+function saveProgress(p) { localStorage.setItem('g2026_progress', JSON.stringify(p)); }
+
+function todayKey() { return new Date().toISOString().split('T')[0]; }
+function loadChecklist() {
+  try { return JSON.parse(localStorage.getItem('g2026_cl_' + todayKey()) || '{}'); } catch { return {}; }
+}
+function saveChecklist(c) { localStorage.setItem('g2026_cl_' + todayKey(), JSON.stringify(c)); }
+
+let progress  = loadProgress();
+let checklist = loadChecklist();
+let expandedGoals = {};
+
+function getCurrent(g) {
+  return progress[g.id] !== undefined ? progress[g.id] : g.def;
+}
+
+function calcPct(g) {
+  const cur = getCurrent(g);
+  if (g.id === 'credit') {
+    return Math.min(100, Math.max(0, Math.round((cur - g.def) / (g.target - g.def) * 100)));
+  }
+  return Math.min(100, Math.round((cur / g.target) * 100));
+}
+
+function step(g) {
+  if (g.target >= 1000000) return 10000;
+  if (g.target >= 100000)  return 1000;
+  if (g.target >= 10000)   return 100;
+  if (g.target >= 1000)    return 10;
+  return 1;
+}
+
+function fmtVal(val, unit) {
+  if (unit === '$') return '$' + val.toLocaleString();
+  return val.toLocaleString() + ' ' + unit;
+}
+
+function pad2(n) { return String(Math.floor(n)).padStart(2,'0'); }
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  COUNTDOWN
+// ═══════════════════════════════════════════════════════════════════════════
+
+function tickCountdown() {
+  const diff = DEADLINE - new Date();
+  if (diff <= 0) { return; }
+  const days  = Math.floor(diff / 86400000);
+  const hrs   = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000) / 60000);
+  const secs  = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent = String(days).padStart(3,'0');
+  document.getElementById('cd-hrs').textContent  = pad2(hrs);
+  document.getElementById('cd-min').textContent  = pad2(mins);
+  document.getElementById('cd-sec').textContent  = pad2(secs);
+}
+setInterval(tickCountdown, 1000);
+tickCountdown();
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function updateStats() {
+  let sumPct = 0, done = 0, active = 0;
+  GOALS.forEach(g => {
+    const p = calcPct(g);
+    sumPct += p;
+    if (p >= 100) done++;
+    else if (p > 0) active++;
+  });
+  const overall = Math.round(sumPct / GOALS.length);
+  const diff    = new Date() - START_DATE;
+  const dayNum  = Math.min(TOTAL_DAYS, Math.max(1, Math.floor(diff / 86400000) + 1));
+
+  document.getElementById('s-pct').textContent    = overall + '%';
+  document.getElementById('s-done').textContent   = done + '/' + GOALS.length;
+  document.getElementById('s-active').textContent = active;
+  document.getElementById('s-day').textContent    = 'Day ' + dayNum;
+
+  // Chart panel
+  const circ = 2 * Math.PI * 62; // 389.6
+  const arc  = document.getElementById('donut-arc');
+  if (arc) arc.style.strokeDashoffset = circ - (circ * overall / 100);
+  const dp = document.getElementById('donut-pct');
+  if (dp) dp.textContent = overall + '%';
+  const pending = GOALS.length - done - active;
+  const dsd = document.getElementById('ds-done');   if(dsd) dsd.textContent = done;
+  const dsa = document.getElementById('ds-active'); if(dsa) dsa.textContent = active;
+  const dsp = document.getElementById('ds-pending');if(dsp) dsp.textContent = pending;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE BADGE STYLES
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PHASE_STYLE = {
+  'IMMEDIATE':    {color:'#A78BFA',bg:'rgba(167,139,250,.15)',border:'rgba(167,139,250,.3)'},
+  'SHORT TERM':   {color:'#F97316',bg:'rgba(249,115,22,.15)', border:'rgba(249,115,22,.3)'},
+  'MEDIUM TERM':  {color:'#60A5FA',bg:'rgba(96,165,250,.15)', border:'rgba(96,165,250,.3)'},
+  'COMMUNITY':    {color:'#FBBF24',bg:'rgba(251,191,36,.15)', border:'rgba(251,191,36,.3)'},
+  'SOCIAL GROWTH':{color:'#EC4899',bg:'rgba(236,72,153,.15)', border:'rgba(236,72,153,.3)'},
+  'REVENUE':      {color:'#10B981',bg:'rgba(16,185,129,.15)', border:'rgba(16,185,129,.3)'},
+  'LEGACY':       {color:'#C9A84C',bg:'rgba(201,168,76,.15)', border:'rgba(201,168,76,.3)'},
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  RENDER GOALS
+// ═══════════════════════════════════════════════════════════════════════════
+
+let activePhaseFilter = 'ALL';
+
+function renderPhaseFilters() {
+  const phases = ['ALL','IMMEDIATE','SHORT TERM','MEDIUM TERM','COMMUNITY','SOCIAL GROWTH','REVENUE','LEGACY'];
+  const wrap = document.getElementById('phase-filters');
+  wrap.innerHTML = phases.map(p => {
+    const count = p === 'ALL' ? GOALS.length : GOALS.filter(g => g.pn === p).length;
+    const label = p === 'ALL' ? `ALL (${count})` : p;
+    return `<button class="pf-btn${p===activePhaseFilter?' active':''}" onclick="filterPhase('${p}')">${label}</button>`;
+  }).join('');
+}
+
+function filterPhase(p) {
+  activePhaseFilter = p;
+  renderPhaseFilters();
+  renderGoals();
+}
+
+function renderGoals() {
+  const container = document.getElementById('goals-container');
+  const filtered  = activePhaseFilter === 'ALL' ? GOALS : GOALS.filter(g => g.pn === activePhaseFilter);
+
+  if (activePhaseFilter !== 'ALL') {
+    container.innerHTML = `<div class="goals-grid">${filtered.map(renderGoalCard).join('')}</div>`;
+    return;
+  }
+
+  // Group by phase
+  const phases = [1,2,3,4,5,6,7];
+  container.innerHTML = phases.map(ph => {
+    const phGoals = GOALS.filter(g => g.p === ph);
+    if (!phGoals.length) return '';
+    const pn = phGoals[0].pn;
+    const ps = PHASE_STYLE[pn] || {};
+    return `
+      <div class="phase-header">
+        <div class="phase-num" style="color:${ps.color||'var(--gold)'}">${ph}</div>
+        <div class="phase-title" style="color:${ps.color||'#444'}">${pn}</div>
+        <div class="phase-line"></div>
+        <div class="phase-count">${phGoals.length} goals</div>
+      </div>
+      <div class="goals-grid">${phGoals.map(renderGoalCard).join('')}</div>
+    `;
+  }).join('');
+}
+
+function renderGoalCard(g) {
+  const cur   = getCurrent(g);
+  const pct   = calcPct(g);
+  const color = CAT_COLOR[g.cat] || '#C9A84C';
+  const done  = pct >= 100;
+  const ps    = PHASE_STYLE[g.pn] || {};
+  const exp   = expandedGoals[g.id];
+
+  return `
+  <div class="goal-card${done?' done':''}" id="card-${g.id}" style="${done?'--done-color:'+color:''}">
+    <div class="goal-card-body">
+      <div class="gc-top">
+        <div class="gc-info">
+          <div class="gc-emoji">${g.e}</div>
+          <div class="gc-title">${g.t}</div>
+          <span class="phase-badge" style="color:${ps.color};background:${ps.bg};border-color:${ps.border}">${g.pn}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          <span class="gc-pct" style="color:${color}">${pct}%</span>
+          ${done?`<span class="trophy-badge">🏆</span>`:''}
+        </div>
+      </div>
+
+      <div class="pb-wrap">
+        <div class="pb-meta">
+          <span class="pb-current">${fmtVal(cur, g.unit)}</span>
+          <span class="pb-target">/ ${fmtVal(g.target, g.unit)}</span>
+        </div>
+        <div class="pb-track">
+          <div class="pb-fill" style="width:${pct}%;background:linear-gradient(90deg,${color}80,${color});${pct>0?'box-shadow:0 0 8px '+color+'50':''}"></div>
+        </div>
+      </div>
+
+      <div class="gc-controls">
+        <div class="gc-btns">
+          <button class="btn-ctrl" onclick="adjustGoal('${g.id}',-1)">−</button>
+          <button class="btn-ctrl plus" onclick="adjustGoal('${g.id}',1)" style="background:${color}">+</button>
+        </div>
+        <button class="btn-expand" onclick="toggleExpand('${g.id}')">
+          ${exp?'▲ less':'▼ plan'}
+        </button>
+      </div>
+    </div>
+    <div class="gc-detail${exp?' open':''}">
+      <div class="detail-row">
+        <span class="detail-icon" style="color:${color}">⚡</span>
+        <span class="detail-text">${g.task}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-icon" style="color:#FBBF24">★</span>
+        <span class="detail-text" style="font-style:italic;color:#555">"${g.tip}"</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function adjustGoal(id, dir) {
+  const g   = GOALS.find(x => x.id === id);
+  const cur = getCurrent(g);
+  const s   = step(g);
+  const nv  = dir > 0
+    ? Math.min(g.target, cur + s)
+    : Math.max(g.def, cur - s);
+  progress[id] = nv;
+  saveProgress(progress);
+  renderGoals();
+  updateStats();
+  renderChart();
+  renderAllGoalsList();
+}
+
+function toggleExpand(id) {
+  expandedGoals[id] = !expandedGoals[id];
+  renderGoals();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  DAILY CHECKLIST
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderChecklist() {
+  const now = new Date();
+  document.getElementById('today-label').textContent =
+    now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) +
+    ' · Day ' + Math.min(TOTAL_DAYS, Math.max(1, Math.floor((now - START_DATE)/86400000)+1)) +
+    ' of ' + TOTAL_DAYS;
+
+  const items    = GOALS.map(g => ({...g, done: !!checklist[g.id]}));
+  const total    = items.length;
+  const doneCount = items.filter(i => i.done).length;
+  const pct      = Math.round(doneCount / total * 100);
+
+  document.getElementById('cl-done-count').textContent = doneCount + '/' + total;
+  document.getElementById('cl-pct').textContent        = pct + '%';
+  document.getElementById('cl-bar').style.width        = pct + '%';
+
+  const phases = [1,2,3,4,5,6,7];
+  const con    = document.getElementById('checklist-container');
+  con.innerHTML = phases.map(ph => {
+    const phItems = items.filter(i => i.p === ph);
+    if (!phItems.length) return '';
+    const pn = phItems[0].pn;
+    return `
+      <div class="cl-group-title">${pn}</div>
+      ${phItems.map(item => `
+        <button class="cl-item${item.done?' done':''}" onclick="toggleCheck('${item.id}')">
+          <div class="cl-check"><span class="cl-check-mark">✓</span></div>
+          <span class="cl-emoji">${item.e}</span>
+          <div class="cl-content">
+            <div class="cl-title">${item.t}</div>
+            <div class="cl-task">${item.task}</div>
+          </div>
+        </button>
+      `).join('')}
+    `;
+  }).join('');
+
+  const allDone = doneCount === total;
+  document.getElementById('daily-complete').style.display = allDone ? 'block' : 'none';
+}
+
+function toggleCheck(id) {
+  checklist[id] = !checklist[id];
+  saveChecklist(checklist);
+  renderChecklist();
+}
+
+function resetChecklist() {
+  checklist = {};
+  saveChecklist(checklist);
+  renderChecklist();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SCHEDULE
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderSchedule() {
+  const con = document.getElementById('schedule-container');
+  con.innerHTML = SCHEDULE.map(s => {
+    const color = CAT_COLOR[s.cat] || '#C9A84C';
+    return `
+    <div class="tl-item">
+      <div class="tl-time">${s.time}</div>
+      <div class="tl-dot-wrap">
+        <div class="tl-dot" style="background:${color}"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-row">
+          <span class="tl-task">${s.task}</span>
+          <div class="tl-right">
+            <span class="tl-dur">${s.dur}</span>
+            <span class="tl-cat" style="color:${color};background:${color}20">${s.cat}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  CHART
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderChart() {
+  // Category bars
+  const catMap = {};
+  GOALS.forEach(g => {
+    if (!catMap[g.cat]) catMap[g.cat] = {pcts:[], color: CAT_COLOR[g.cat]};
+    catMap[g.cat].pcts.push(calcPct(g));
+  });
+  const catData = Object.entries(catMap).map(([cat,{pcts,color}]) => ({
+    name: cat, color,
+    pct: Math.round(pcts.reduce((a,b)=>a+b,0)/pcts.length)
+  })).sort((a,b) => b.pct - a.pct);
+
+  const catBars = document.getElementById('cat-bars');
+  if (catBars) {
+    catBars.innerHTML = catData.map(c => `
+      <div class="cat-bar-item">
+        <div class="cat-bar-row">
+          <span class="cat-bar-name" style="color:${c.color}">${c.name}</span>
+          <span class="cat-bar-pct" style="color:${c.color}">${c.pct}%</span>
+        </div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width:${c.pct}%;background:linear-gradient(90deg,${c.color}60,${c.color})"></div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Phase bars
+  const phaseBars = document.getElementById('phase-bars');
+  if (phaseBars) {
+    phaseBars.innerHTML = [1,2,3,4,5,6,7].map(ph => {
+      const phGoals = GOALS.filter(g => g.p === ph);
+      const pn  = phGoals[0]?.pn;
+      const avg = Math.round(phGoals.reduce((sum,g) => sum+calcPct(g), 0) / phGoals.length);
+      const col = PHASE_COLOR[ph-1];
+      const done = phGoals.filter(g => calcPct(g) >= 100).length;
+      const ps   = PHASE_STYLE[pn] || {};
+      return `
+        <div class="phase-bar-item">
+          <div class="phase-bar-row">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:.6rem;font-weight:700;color:#555;width:14px">P${ph}</span>
+              <span class="phase-tag" style="color:${ps.color||col};background:${ps.bg||col+'20'}">${pn}</span>
+            </div>
+            <div class="phase-bar-right">
+              <span>${done}/${phGoals.length}</span>
+              <span class="phase-bar-pct" style="color:${col}">${avg}%</span>
+            </div>
+          </div>
+          <div class="phase-track">
+            <div class="phase-fill" style="width:${avg}%;background:linear-gradient(90deg,${col}60,${col})"></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+}
+
+function renderAllGoalsList() {
+  const con = document.getElementById('all-goals-list');
+  if (!con) return;
+  con.innerHTML = GOALS.map(g => {
+    const pct   = calcPct(g);
+    const color = CAT_COLOR[g.cat] || '#C9A84C';
+    return `
+      <div class="ag-item">
+        <span class="ag-emoji">${g.e}</span>
+        <div class="ag-right">
+          <div class="ag-row">
+            <span class="ag-title">${g.t}</span>
+            <span class="ag-pct" style="color:${color}">${pct}%</span>
+          </div>
+          <div class="ag-bar">
+            <div class="ag-fill" style="width:${pct}%;background:linear-gradient(90deg,${color}60,${color})"></div>
+          </div>
+        </div>
+        ${pct>=100?`<span style="font-size:.8rem">🏆</span>`:''}
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', ['goals','daily','schedule','chart'][i] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(name + '-panel').classList.add('active');
+  if (name === 'chart') { renderChart(); renderAllGoalsList(); }
+  if (name === 'daily') { renderChecklist(); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════════════════
+
+renderPhaseFilters();
+renderGoals();
+renderChecklist();
+renderSchedule();
+updateStats();
+</script>
+</body>
+</html>

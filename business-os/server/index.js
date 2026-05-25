@@ -138,6 +138,15 @@ app.get('/', (req, res) => {
   res.send('<h1>Affiliate Launchpad</h1><p><a href="/login">Go to App</a></p>');
 });
 
+// Standalone Goals Dashboard (no auth required)
+app.get('/goals', (req, res) => {
+  const goalsFile = path.join(__dirname, '../../goals-2026.html');
+  const fallback  = path.join(__dirname, '../../../goals-2026.html');
+  if (fs.existsSync(goalsFile))  return res.sendFile(goalsFile);
+  if (fs.existsSync(fallback))   return res.sendFile(fallback);
+  res.status(404).send('Goals dashboard not found.');
+});
+
 // All CRM routes → React app
 const crmRoutes = ['/app', '/dashboard', '/login', '/pipeline', '/sales', '/marketing', '/clients', '/dialer', '/portal', '/resources', '/settings'];
 crmRoutes.forEach(route => {
