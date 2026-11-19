@@ -1,0 +1,314 @@
+<title>Lead Text Sender</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow working column, a sticky progress bar, one card per lead */
+:root {
+  --bg: #f7f6f2; --surface: #ffffff; --fg: #17150f; --muted: #6b6658;
+  --line: #e4e0d4; --accent: #9a7a22; --accent-ink: #ffffff; --accent-soft: #f3ecd8;
+  --ok: #2f7d4f; --ok-soft: #e3f2e8; --warn: #a3541b;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-head: "Space Grotesk", "Inter", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f0e0b; --surface: #1a1915; --fg: #f2efe6; --muted: #a39d8c;
+  --line: #2e2c25; --accent: #d4b25a; --accent-ink: #17150f; --accent-soft: #2b2617;
+  --ok: #6cc28e; --ok-soft: #17291f; --warn: #e39a5f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f0e0b; --surface: #1a1915; --fg: #f2efe6; --muted: #a39d8c;
+  --line: #2e2c25; --accent: #d4b25a; --accent-ink: #17150f; --accent-soft: #2b2617;
+  --ok: #6cc28e; --ok-soft: #17291f; --warn: #e39a5f; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 720px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 20px; }
+h1, h2 { font-family: var(--font-head); text-wrap: balance; margin: 0; }
+h1 { font-size: 1.75rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.1rem; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+.label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+input[type="file"] { max-width: 100%; color: var(--muted); }
+select, textarea { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+select { padding: 6px 8px; }
+textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; resize: vertical; min-height: 112px; line-height: 1.45; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn { font: 600 0.9rem var(--font-body); border-radius: 8px; padding: 9px 14px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--fg); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover { filter: brightness(0.96); }
+
+.progress { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 8px; display: flex; flex-direction: column; gap: 6px; }
+.bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--ok); transition: width .2s; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+
+.notice { background: var(--accent-soft); border-radius: 8px; padding: 10px 12px; font-size: 0.88rem; }
+.lead { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.lead.sent { background: var(--ok-soft); border-color: transparent; }
+.lead-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.lead-name { font-weight: 600; font-size: 1.05rem; }
+.phone { font-variant-numeric: tabular-nums; color: var(--muted); user-select: all; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 0.78rem; background: var(--bg); border: 1px solid var(--line); border-radius: 99px; padding: 2px 9px; color: var(--muted); max-width: 100%; overflow-wrap: anywhere; }
+.count { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.count.long { color: var(--warn); }
+.badge-sent { font-size: 0.78rem; font-weight: 600; color: var(--ok); }
+.kit { display: flex; flex-direction: column; gap: 8px; }
+.kit-item { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.kit-item p { overflow-wrap: anywhere; }
+#toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg);
+  padding: 8px 14px; border-radius: 8px; font-size: 0.88rem; z-index: 20; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span class="label">Affiliate Launchpad · Thanksgiving offer</span>
+    <h1>Lead Text Sender</h1>
+    <p class="muted">Upload your Youform export. Each lead gets a text written from their own application. Tap <strong>Open in Messages</strong>, check the text, and hit send.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="load-h">
+    <h2 id="load-h">1. Load your leads</h2>
+    <p class="small muted">In Youform: open the form, go to <strong>Responses</strong>, then <strong>Download CSV</strong>. The file stays on this device and is never uploaded anywhere.</p>
+    <div class="row">
+      <input type="file" id="csv" accept=".csv,text/csv">
+      <label class="small" for="limit">Show</label>
+      <select id="limit">
+        <option value="30">30 leads</option>
+        <option value="60" selected>60 leads</option>
+        <option value="100">100 leads</option>
+        <option value="9999">All leads</option>
+      </select>
+    </div>
+    <p id="status" class="small muted">Showing 3 example leads. Upload your CSV to replace them.</p>
+  </section>
+
+  <div class="progress" aria-live="polite">
+    <div class="row" style="justify-content:space-between">
+      <h2 style="font-size:1rem">2. Send tonight</h2>
+      <span id="progress-text" class="small muted">0 of 0 sent</span>
+    </div>
+    <div class="bar"><i id="progress-bar"></i></div>
+  </div>
+
+  <p class="notice">Send about one every 30–60 seconds and stop around 200 tonight. If <strong>Open in Messages</strong> doesn't open the app, tap <strong>Copy text</strong> and paste it into Messages.</p>
+
+  <div id="leads" style="display:flex;flex-direction:column;gap:12px"></div>
+
+  <section class="panel kit" aria-labelledby="kit-h">
+    <h2 id="kit-h">3. When they reply</h2>
+    <div id="kit"></div>
+  </section>
+</div>
+<div id="toast" hidden></div>
+
+<script>
+(function () {
+  const IG = "@bestgoat3";
+  const IG_URL = "instagram.com/bestgoat3";
+  const CAL = "https://calendly.com/goatecommgmt/book";
+  const STORE = "lts-sent-v1";
+
+  const EXAMPLES = [
+    { first: "Jasmine", phone: "+15555550101", goal: "Make $3k a month so I can quit my job", income: "$0 — just starting", ready: "Yes, definitely", source: "TikTok", example: true },
+    { first: "Marcus", phone: "+15555550102", goal: "Start my own business and get funding", income: "$1–$500/mo", ready: "I need to learn more first", source: "Instagram", example: true },
+    { first: "Tanya", phone: "+15555550103", goal: "", income: "", ready: "", source: "", example: true }
+  ];
+
+  const KIT = [
+    { title: "They say yes or ask for more", text: `Love it! Grab a time here and we'll get your free LLC + credit repair started: ${CAL}\n\nYou can see what we do on my IG too: ${IG_URL}` },
+    { title: "They ask \"is it really free?\"", text: `Yes, 100% free until Thanksgiving. We set up your LLC and start your credit repair at no cost, then show you the blueprint to go after business funding. Easiest way is a quick call: ${CAL}` },
+    { title: "They ask who you are", text: `It's Karl from Affiliate Launchpad. You applied on our site a while back. Here's my IG so you can see who I am: ${IG_URL}` },
+    { title: "Follow-up tomorrow (no reply)", text: `Hey {first}, just making sure you saw this. Free LLC + credit repair ends Thanksgiving. Want me to save you a spot? (Karl, IG ${IG})` }
+  ];
+
+  let leads = EXAMPLES.slice();
+  let sent = loadSent();
+
+  function loadSent() { try { return JSON.parse(localStorage.getItem(STORE) || "{}"); } catch (e) { return {}; } }
+  function saveSent() { try { localStorage.setItem(STORE, JSON.stringify(sent)); } catch (e) {} }
+
+  function parseCSV(text) {
+    const rows = []; let row = []; let f = ""; let q = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) {
+        if (c === '"' && text[i + 1] === '"') { f += '"'; i++; }
+        else if (c === '"') q = false;
+        else f += c;
+      } else if (c === '"') q = true;
+      else if (c === ",") { row.push(f); f = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        row.push(f); f = ""; if (row.some(v => v.trim() !== "")) rows.push(row); row = [];
+      } else f += c;
+    }
+    row.push(f); if (row.some(v => v.trim() !== "")) rows.push(row);
+    return rows;
+  }
+
+  function normPhone(p) {
+    const d = String(p || "").replace(/\D/g, "");
+    if (d.length === 10) return "+1" + d;
+    if (d.length === 11 && d[0] === "1") return "+" + d;
+    if (d.length > 11) return "+" + d;
+    return "";
+  }
+  function prettyPhone(p) {
+    const m = p.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
+    return m ? `(${m[1]}) ${m[2]}-${m[3]}` : p;
+  }
+  function cap(s) { s = s.trim(); return s ? s[0].toUpperCase() + s.slice(1).toLowerCase() : s; }
+  function cleanGoal(g) {
+    g = String(g || "").replace(/\s+/g, " ").trim().replace(/[.!\s]+$/, "");
+    if (g.length < 4 || g.length > 90) return "";
+    return g[0].toLowerCase() + g.slice(1);
+  }
+
+  function rowsToLeads(rows) {
+    const head = rows[0].map(h => h.toLowerCase().trim());
+    const col = (re, not) => head.findIndex(h => re.test(h) && !(not && not.test(h)));
+    const iFirst = col(/first/), iName = col(/name/, /last|email|user/), iPhone = col(/phone|mobile|cell/);
+    const iGoal = col(/goal/), iIncome = col(/income/), iReady = col(/ready|invest/), iSource = col(/find us|source|hear/);
+    const iDate = col(/submitted|created|date|time/);
+    if (iPhone < 0) throw new Error("I couldn't find a phone column. Check that the CSV is the Youform responses export.");
+    const seen = new Set(); const out = [];
+    rows.slice(1).forEach(r => {
+      const phone = normPhone(r[iPhone]);
+      if (!phone || seen.has(phone)) return;
+      seen.add(phone);
+      let first = iFirst >= 0 ? r[iFirst] : (iName >= 0 ? (r[iName] || "").split(" ")[0] : "");
+      out.push({
+        first: cap(first || ""), phone,
+        goal: iGoal >= 0 ? r[iGoal] || "" : "", income: iIncome >= 0 ? r[iIncome] || "" : "",
+        ready: iReady >= 0 ? r[iReady] || "" : "", source: iSource >= 0 ? r[iSource] || "" : "",
+        date: iDate >= 0 ? Date.parse(r[iDate]) || 0 : 0
+      });
+    });
+    out.sort((a, b) => b.date - a.date);
+    return out;
+  }
+
+  function buildMessage(l, i) {
+    const name = l.first || "Hey";
+    const goal = cleanGoal(l.goal);
+    const zero = /\$0|just starting/i.test(l.income);
+    const learn = /learn more/i.test(l.ready);
+    const extra = zero ? " Even if you're starting from zero, this is the foundation." : learn ? " No pressure, I'll walk you through all of it." : "";
+    if (!goal) {
+      return `${name}, it's Karl from Affiliate Launchpad (IG ${IG}). You applied with us a while back. Till Thanksgiving I'm giving away a FREE LLC setup + FREE credit repair so you can go after business funding.${extra} Want me to save you a spot?`;
+    }
+    const v = [
+      `${name}! Karl here from Affiliate Launchpad (IG ${IG}). On your application you said your #1 goal was "${goal}." From now till Thanksgiving I'm doing a FREE LLC setup + FREE credit repair to get you there faster.${extra} Want me to hold a spot for you?`,
+      `Hey ${name}, it's Karl (${IG} on IG). I was going through applications and saw yours: "${goal}." I can help with that. Till Thanksgiving I'm setting people up with a free LLC + free credit repair so they can get business funding.${extra} Still interested?`,
+      `${name}, quick question. Are you still working on "${goal}"? It's Karl from Affiliate Launchpad (IG ${IG}). Till Thanksgiving I'm giving away a free LLC + free credit repair so you can go after business funding.${extra} Want in?`
+    ];
+    return v[i % 3];
+  }
+
+  function smsHref(phone, body) { return `sms:${phone}&body=${encodeURIComponent(body)}`; }
+
+  function toast(msg) {
+    const t = document.getElementById("toast"); t.textContent = msg; t.hidden = false;
+    clearTimeout(toast._t); toast._t = setTimeout(() => { t.hidden = true; }, 1800);
+  }
+  function copy(text, ta) {
+    const done = () => toast("Copied");
+    try {
+      navigator.clipboard.writeText(text).then(done, () => { if (ta) { ta.focus(); ta.select(); } toast("Press and hold to copy"); });
+    } catch (e) { if (ta) { ta.focus(); ta.select(); } toast("Press and hold to copy"); }
+  }
+
+  function render() {
+    const limit = +document.getElementById("limit").value;
+    const list = leads.slice(0, limit);
+    const box = document.getElementById("leads"); box.innerHTML = "";
+    list.forEach((l, i) => {
+      const card = document.createElement("article"); card.className = "lead" + (sent[l.phone] ? " sent" : "");
+      const msg = buildMessage(l, i);
+      card.innerHTML = `
+        <div class="lead-head">
+          <span class="lead-name"></span>
+          <span class="phone"></span>
+        </div>
+        <div class="chips"></div>
+        <textarea aria-label="Message"></textarea>
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <a class="btn primary open">Open in Messages</a>
+            <button class="btn copy" type="button">Copy text</button>
+            <button class="btn mark" type="button"></button>
+          </div>
+          <span class="count"></span>
+        </div>`;
+      card.querySelector(".lead-name").textContent = `${i + 1}. ${l.first || "(no name)"}${l.example ? " · example" : ""}`;
+      card.querySelector(".phone").textContent = prettyPhone(l.phone);
+      const chips = card.querySelector(".chips");
+      [["Goal", l.goal], ["Income", l.income], ["Ready", l.ready], ["Found us", l.source]].forEach(([k, v]) => {
+        if (!v) return; const c = document.createElement("span"); c.className = "chip"; c.textContent = `${k}: ${v}`; chips.appendChild(c);
+      });
+      const ta = card.querySelector("textarea"); ta.id = "msg-" + i; ta.value = msg;
+      const open = card.querySelector(".open"); const count = card.querySelector(".count"); const mark = card.querySelector(".mark");
+      const sync = () => {
+        open.href = smsHref(l.phone, ta.value);
+        count.textContent = ta.value.length + " chars"; count.classList.toggle("long", ta.value.length > 320);
+        mark.textContent = sent[l.phone] ? "Sent ✓ (undo)" : "Mark sent";
+      };
+      ta.addEventListener("input", sync);
+      open.addEventListener("click", () => { sent[l.phone] = 1; saveSent(); card.classList.add("sent"); sync(); updateProgress(list); });
+      card.querySelector(".copy").addEventListener("click", () => copy(ta.value, ta));
+      mark.addEventListener("click", () => {
+        if (sent[l.phone]) delete sent[l.phone]; else sent[l.phone] = 1;
+        saveSent(); card.classList.toggle("sent", !!sent[l.phone]); sync(); updateProgress(list);
+      });
+      sync(); box.appendChild(card);
+    });
+    updateProgress(list);
+  }
+
+  function updateProgress(list) {
+    const n = list.filter(l => sent[l.phone]).length;
+    document.getElementById("progress-text").textContent = `${n} of ${list.length} sent`;
+    document.getElementById("progress-bar").style.width = list.length ? (n / list.length * 100) + "%" : "0";
+  }
+
+  function renderKit() {
+    const kit = document.getElementById("kit");
+    KIT.forEach((k, i) => {
+      const d = document.createElement("div"); d.className = "kit-item";
+      d.innerHTML = `<span class="label"></span><p></p><div><button class="btn" type="button">Copy</button></div>`;
+      d.querySelector(".label").textContent = k.title;
+      d.querySelector("p").textContent = k.text;
+      d.querySelector("button").addEventListener("click", () => copy(k.text));
+      kit.appendChild(d);
+    });
+  }
+
+  document.getElementById("csv").addEventListener("change", e => {
+    const file = e.target.files[0]; if (!file) return;
+    const st = document.getElementById("status");
+    file.text().then(t => {
+      try {
+        const rows = parseCSV(t.replace(/^﻿/, ""));
+        const parsed = rowsToLeads(rows);
+        if (!parsed.length) throw new Error("No rows with a valid phone number were found.");
+        leads = parsed;
+        st.textContent = `Loaded ${parsed.length} leads with phone numbers, newest first.`;
+        render();
+      } catch (err) { st.textContent = err.message; }
+    });
+  });
+  document.getElementById("limit").addEventListener("change", render);
+
+  renderKit(); render();
+})();
+</script>
